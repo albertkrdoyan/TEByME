@@ -1,0 +1,8 @@
+D:\TEbyME\TEbyME\bin\Release\TEbyME.exe.config
+D:\TEbyME\TEbyME\bin\Release\TEbyME.exe
+D:\TEbyME\TEbyME\obj\Release\TEbyME.csproj.AssemblyReference.cache
+D:\TEbyME\TEbyME\obj\Release\TEbyME.MainForm.resources
+D:\TEbyME\TEbyME\obj\Release\TEbyME.Resource1.resources
+D:\TEbyME\TEbyME\obj\Release\TEbyME.csproj.GenerateResource.cache
+D:\TEbyME\TEbyME\obj\Release\TEbyME.csproj.CoreCompileInputs.cache
+D:\TEbyME\TEbyME\obj\Release\TEbyME.exe
