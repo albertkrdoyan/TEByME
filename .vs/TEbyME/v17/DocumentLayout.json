@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\TEbyME v1.1\\",
+  "WorkspaceRootPath": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|D:\\TEbyME v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|c:\\users\\alber\\desktop\\tebyme v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|C:\\Users\\alber\\Desktop\\TEbyME v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|d:\\tebyme v1.1\\tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|C:\\Users\\alber\\Desktop\\TEbyME v1.1\\tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|D:\\TEbyME v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,28 +22,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainForm.Designer.cs",
-              "DocumentMoniker": "D:\\TEbyME v1.1\\TEbyME\\MainForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.Designer.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.Designer.cs",
-              "ToolTip": "D:\\TEbyME v1.1\\TEbyME\\MainForm.Designer.cs",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.Designer.cs",
               "RelativeToolTip": "TEbyME\\MainForm.Designer.cs",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAtwLIAAABGAAAAAAAAAA==",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAtwIIAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-05T13:25:29.221Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainForm.cs [Design]",
-              "DocumentMoniker": "D:\\TEbyME v1.1\\TEbyME\\MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "D:\\TEbyME v1.1\\TEbyME\\MainForm.cs [Design]",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs [Design]",
               "RelativeToolTip": "TEbyME\\MainForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-10T20:14:20.282Z",
@@ -51,13 +51,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MainForm.cs",
-              "DocumentMoniker": "D:\\TEbyME v1.1\\TEbyME\\MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "D:\\TEbyME v1.1\\TEbyME\\MainForm.cs",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeToolTip": "TEbyME\\MainForm.cs",
-              "ViewState": "AgIAAO8AAAAAAAAAAAArwAYBAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAjwHYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-05T11:34:43.508Z",
               "EditorCaption": ""

@@ -73,7 +73,7 @@ namespace TEbyME
 			is_search_popup_indow = true;
 			is_swindow_mouse_down = false;			
 						
-			int hei = 140, wid = 630;
+			int hei = 113, wid = 663;
 	        searchWindow = new Form()
 			{
 				Size = new Size(wid, hei),
@@ -85,6 +85,7 @@ namespace TEbyME
 				ShowIcon = false,
 				ControlBox = false,
 				StartPosition = FormStartPosition.Manual,
+				FormBorderStyle = FormBorderStyle.None,				
             };	        
 	        
             SetWindowPos(searchWindow.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
@@ -114,7 +115,8 @@ namespace TEbyME
         }// dyn. beh.
         
         void sform_load(object sedner, EventArgs e){
-        	searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 2), this.Location.Y + searchWindow.Height / 3);
+			//searchWindow.BackColor = Color.Red; //Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
+            searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + Convert.ToInt32((double)searchWindow.Height / 1.5));
         }
         
         void sform_sizeeventhandler(object sender, EventArgs e){
@@ -189,17 +191,12 @@ namespace TEbyME
 			screen_width = this.Width;
         }
         
-        void Label2Click(object sender, System.EventArgs e)
-		{
-        	OpenAndCloseSearchAndReplaceWindow();
-		}
-        
         void SearchWindowOpt(bool to_window){
         	foreach (Control c in searchPanel.Controls){
         		if (to_window)
-        			c.Location = new Point(c.Location.X - 165, c.Location.Y);
+        			c.Location = new Point(c.Location.X - 125, c.Location.Y);
         		else
-        			c.Location = new Point(c.Location.X + 165, c.Location.Y);
+        			c.Location = new Point(c.Location.X + 125, c.Location.Y);
         	}
         }
         
@@ -240,8 +237,8 @@ namespace TEbyME
                 is_search_replace_window_open = false;
                 if (is_search_popup_indow)
 				{
-                    mainLayoutPanel.RowStyles[0].Height -= 110F;
-                    mainLayoutPanel.RowStyles[2].Height += 110F;
+                    mainLayoutPanel.RowStyles[0].Height -= 115F;
+                    mainLayoutPanel.RowStyles[2].Height += 115F;
                     mainLayoutPanel.Controls.Remove(searchPanel);
 				}
 				else
@@ -257,8 +254,8 @@ namespace TEbyME
                 is_search_replace_window_open = true;
 				if (is_search_popup_indow) 
 				{
-                    mainLayoutPanel.RowStyles[0].Height += 110F;
-                    mainLayoutPanel.RowStyles[2].Height -= 110F;
+                    mainLayoutPanel.RowStyles[0].Height += 115F;
+                    mainLayoutPanel.RowStyles[2].Height -= 115F;
                     mainLayoutPanel.Controls.Add(searchPanel, 0, 0);
                     this.ActiveControl = searchTB;
                 }
@@ -427,13 +424,23 @@ namespace TEbyME
 			f.ActiveControl = tb;
 		}
 
-        private void label1_Click(object sender, EventArgs e)
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+			toolStripStatusLabel1.Text = Size.ToString();
+        }
+
+        private void minMaxSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
             if (is_search_popup_indow)
-				is_search_popup_indow = false;
+                is_search_popup_indow = false;
             else
-				is_search_popup_indow= true;         
+                is_search_popup_indow = true;
+            OpenAndCloseSearchAndReplaceWindow();
+        }
+
+        private void closeSearch_Click(object sender, EventArgs e)
+        {
             OpenAndCloseSearchAndReplaceWindow();
         }
 
