@@ -14,6 +14,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Security.Cryptography;
 
 namespace TEbyME
 {
@@ -35,15 +37,15 @@ namespace TEbyME
 		//end
 		
 		string filepath;
-		bool text_changed, is_search_replace_window_open, is_search_popup_indow;
+		bool text_changed, is_search_replace_window_open, is_search_popup_window;
 		int screen_width;
 		
 		struct SWindowMove{
 			public bool is_swindow_mouse_down;
 			public int dx, dy;
 		}
-		
-		SWindowMove swm = new MainForm.SWindowMove();
+
+		SWindowMove swm;
 
         private Form searchWindow;
 
@@ -60,26 +62,29 @@ namespace TEbyME
 			pathInit(path);
 
             is_search_replace_window_open = false;
-			is_search_popup_indow = true;
-			swm.is_swindow_mouse_down = false;			
-						
-			int hei = 113, wid = 663;
-	        searchWindow = new Form()
+			is_search_popup_window = true;
+			swm.is_swindow_mouse_down = false;
+
+            swm = new MainForm.SWindowMove();
+			swm.dy = 0;
+
+            int hei = 113, wid = 663;
+			searchWindow = new Form()
 			{
 				Size = new Size(wid, hei),
 				MaximumSize = new Size(wid, hei),
 				MinimumSize = new Size(wid, hei),
-                Font = new Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
+				Font = new Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
 				Name = "SearchWindow",
 				Text = "S&R",
 				ShowIcon = false,
 				ControlBox = false,
 				StartPosition = FormStartPosition.Manual,
-				FormBorderStyle = FormBorderStyle.None,				
-            };	        
-	        
+				FormBorderStyle = FormBorderStyle.None,
+			};
+			searchWindow.Load += new System.EventHandler(this.SForm_Load);
+
             SetWindowPos(searchWindow.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-           	searchWindow.Load += new EventHandler(sform_load);
         }
         
         void pathInit(string path){
@@ -103,27 +108,33 @@ namespace TEbyME
         }
         
         void sform_mouse_down(object sender, EventArgs e){
-        	swm.is_swindow_mouse_down = true;
-        	swm.dx = Cursor.Position.X - searchWindow.Location.X;
-        	swm.dy = Cursor.Position.Y - searchWindow.Location.Y;
+            swm.is_swindow_mouse_down = true;
+            swm.dx = Cursor.Position.X - searchWindow.Location.X;
+            swm.dy = Cursor.Position.Y - searchWindow.Location.Y;
         }
         
         void sform_mouse_up(object sender, EventArgs e){
         	swm.is_swindow_mouse_down = false;
-        	
-        	if (is_search_popup_indow) return;
-        	
-        	if (searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 &&
+
+            if (!is_search_popup_window && searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 &&
         	    searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width){
         		mainLayoutPanel.RowStyles[0].Height = 0F;
         		mainLayoutPanel.RowStyles[2].Height += 75F;
         		minMaxSearch_Click(null, null);
         	}
         }
-        
+
+		void titleMouseDoubleClick(object sender, MouseEventArgs e)
+		{
+            if (!is_search_popup_window)
+                minMaxSearch_Click(null, null);
+        }
+
         void sform_move(object sender, EventArgs e){
-        	if (swm.is_swindow_mouse_down && !is_search_popup_indow){
-        		searchWindow.Location = new Point(Cursor.Position.X - swm.dx, Cursor.Position.Y - swm.dy);
+            int cpx = Cursor.Position.X, cpy = Cursor.Position.Y;
+
+            if (swm.is_swindow_mouse_down && !is_search_popup_window){
+                searchWindow.Location = new Point(cpx - swm.dx, cpy - swm.dy);
         		toolStripStatusLabel1.Text = searchWindow.Location.ToString() + Cursor.Position.ToString();
         		
         		if (searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 &&
@@ -139,19 +150,20 @@ namespace TEbyME
         			}
         		}
         	}
-        }
-        
-        void mainFormMove(object sender, EventArgs e){
-        	
-        }
-        
-        void sform_load(object sedner, EventArgs e){
-//			searchWindow.BackColor = Color.Red; //Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
-        	searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
+
+			if (swm.is_swindow_mouse_down && is_search_popup_window)
+			{
+				OpenAndCloseSearchAndReplaceWindow();
+				is_search_popup_window = !is_search_popup_window;
+				OpenAndCloseSearchAndReplaceWindow();
+
+                searchWindow.Location = new Point(this.Location.X + cpx - swm.dx, this.Location.Y + cpy - swm.dy);
+				fileNameLabel.Text = searchWindow.Location.ToString();
+            }
         }
         
         void sform_sizeeventhandler(object sender, EventArgs e){
-        	if (!is_search_popup_indow && is_search_replace_window_open){
+        	if (!is_search_popup_window && is_search_replace_window_open){
         		if (WindowState == FormWindowState.Minimized)
         			searchWindow.Hide();
         		else
@@ -217,9 +229,9 @@ namespace TEbyME
 			text_changed = false;
 		}
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {            
-			screen_width = this.Width;
+        private void SForm_Load(object sender, EventArgs e)
+        {
+            searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
         }
         
         void SearchWindowOpt(bool to_window){
@@ -266,7 +278,7 @@ namespace TEbyME
             if (is_search_replace_window_open)
             {
                 is_search_replace_window_open = false;
-                if (is_search_popup_indow)
+                if (is_search_popup_window)
 				{
                     mainLayoutPanel.RowStyles[0].Height -= 115F;
                     mainLayoutPanel.RowStyles[2].Height += 115F;
@@ -283,7 +295,7 @@ namespace TEbyME
             else
             {
                 is_search_replace_window_open = true;
-				if (is_search_popup_indow) 
+				if (is_search_popup_window) 
 				{
                     mainLayoutPanel.RowStyles[0].Height += 115F;
                     mainLayoutPanel.RowStyles[2].Height -= 115F;
@@ -463,7 +475,7 @@ namespace TEbyME
         private void minMaxSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
-            is_search_popup_indow = !is_search_popup_indow;
+            is_search_popup_window = !is_search_popup_window;
             OpenAndCloseSearchAndReplaceWindow();
         }
 

@@ -142,7 +142,7 @@ namespace TEbyME
             // 
             // searchPanel
             // 
-            this.searchPanel.BackColor = System.Drawing.Color.SlateGray;
+            this.searchPanel.BackColor = Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));// System.Drawing.Color.SlateGray;
             this.searchPanel.Controls.Add(this.title);
             this.searchPanel.Controls.Add(this.minMaxSearch);
             this.searchPanel.Controls.Add(this.closeSearch);
@@ -174,6 +174,7 @@ namespace TEbyME
             this.title.MouseDown += sform_mouse_down;
             this.title.MouseUp += sform_mouse_up;
             this.title.MouseMove += sform_move;
+            this.title.MouseDoubleClick += new MouseEventHandler(this.titleMouseDoubleClick);
             // 
             // minMaxSearch
             // 
@@ -229,7 +230,6 @@ namespace TEbyME
             this.findBtn.Size = new System.Drawing.Size(75, 35);
             this.findBtn.TabIndex = 0;
             this.findBtn.Text = "Find";
-            this.findBtn.UseVisualStyleBackColor = false;
             // 
             // findNextBtn
             // 
@@ -240,7 +240,6 @@ namespace TEbyME
             this.findNextBtn.Size = new System.Drawing.Size(75, 35);
             this.findNextBtn.TabIndex = 0;
             this.findNextBtn.Text = "Next";
-            this.findNextBtn.UseVisualStyleBackColor = false;
             // 
             // findPrevBtn
             // 
@@ -262,7 +261,6 @@ namespace TEbyME
             this.clearBtn.Size = new System.Drawing.Size(75, 35);
             this.clearBtn.TabIndex = 0;
             this.clearBtn.Text = "Clear";
-            this.clearBtn.UseVisualStyleBackColor = false;
             // 
             // replaceAllBtn
             // 
@@ -273,7 +271,6 @@ namespace TEbyME
             this.replaceAllBtn.Size = new System.Drawing.Size(139, 35);
             this.replaceAllBtn.TabIndex = 0;
             this.replaceAllBtn.Text = "Replace All";
-            this.replaceAllBtn.UseVisualStyleBackColor = false;
             // 
             // replaceBtn
             // 
@@ -284,7 +281,6 @@ namespace TEbyME
             this.replaceBtn.Size = new System.Drawing.Size(109, 35);
             this.replaceBtn.TabIndex = 0;
             this.replaceBtn.Text = "Replace";
-            this.replaceBtn.UseVisualStyleBackColor = false;
             // 
             // fileNameLabel
             // 
@@ -356,10 +352,8 @@ namespace TEbyME
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEbyME v1.0";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.SizeChanged += new System.EventHandler(sform_sizeeventhandler);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-            this.Move += new System.EventHandler(mainFormMove);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.searchPanel.ResumeLayout(false);
