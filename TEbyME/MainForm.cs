@@ -37,7 +37,13 @@ namespace TEbyME
 		string filepath;
 		bool text_changed, is_search_replace_window_open, is_search_popup_indow;
 		int screen_width;
-		bool is_swindow_mouse_down;
+		
+		struct SWindowMove{
+			public bool is_swindow_mouse_down;
+			public int dx, dy;
+		}
+		
+		SWindowMove swm = new MainForm.SWindowMove();
 
         private Form searchWindow;
 
@@ -51,27 +57,11 @@ namespace TEbyME
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
-			if (path != string.Empty){
-				filepath = path;
-				textArea.Text = File.ReadAllText(filepath);
-				text_changed = false;
-				
-				fileNameLabel.Text = "";
-                int last_slash = -1;
-                for (int i = 0; i < filepath.Length; ++i){
-                	if (filepath[i] == '\\')
-                		last_slash = i;
-                }
-                for (int i = last_slash + 1; i < filepath.Length; ++i)
-                	fileNameLabel.Text += filepath[i];
-			}else{
-				filepath = "";
-				text_changed = true;
-			}
+			pathInit(path);
 
             is_search_replace_window_open = false;
 			is_search_popup_indow = true;
-			is_swindow_mouse_down = false;			
+			swm.is_swindow_mouse_down = false;			
 						
 			int hei = 113, wid = 663;
 	        searchWindow = new Form()
@@ -89,33 +79,53 @@ namespace TEbyME
             };	        
 	        
             SetWindowPos(searchWindow.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-            this.SizeChanged += new EventHandler(sform_sizeeventhandler);  
            	searchWindow.Load += new EventHandler(sform_load);
-           	
-//           	searchWindow.Move += new EventHandler(sform_move);
-//           	searchWindow.Click += new EventHandler(sform_mouse_down);
-//           	searchWindow.MouseUp += new MouseEventHandler(sform_mouse_up);
         }
         
-//        
+        void pathInit(string path){
+        	if (path != string.Empty){
+				filepath = path;
+				textArea.Text = File.ReadAllText(filepath);
+				text_changed = false;
+				
+				fileNameLabel.Text = "";
+                int last_slash = -1;
+                for (int i = 0; i < filepath.Length; ++i){
+                	if (filepath[i] == '\\')
+                		last_slash = i;
+                }
+                for (int i = last_slash + 1; i < filepath.Length; ++i)
+                	fileNameLabel.Text += filepath[i];
+			}else{
+				filepath = "";
+				text_changed = true;
+			}
+        }
         
         // dyn. beh
         void sform_mouse_down(object sender, EventArgs e){
-//        	is_swindow_mouse_down = true;
-			MessageBox.Show("Click");
+        	swm.is_swindow_mouse_down = true;
+        	swm.dx = Cursor.Position.X - searchWindow.Location.X;
+        	swm.dy = Cursor.Position.Y - searchWindow.Location.Y;
         }
         
         void sform_mouse_up(object sender, EventArgs e){
-//        	is_swindow_mouse_down = false;
+        	swm.is_swindow_mouse_down = false;
         }
         
         void sform_move(object sender, EventArgs e){
-        	if (!is_swindow_mouse_down)
-        		toolStripStatusLabel1.Text = (Cursor.Position.X - this.Location.X) + " " + (Cursor.Position.Y - this.Location.Y);
+        	if (swm.is_swindow_mouse_down && !is_search_popup_indow){
+        		searchWindow.Location = new Point(Cursor.Position.X - swm.dx, Cursor.Position.Y - swm.dy);
+        		toolStripStatusLabel1.Text = searchWindow.Location.ToString() + Cursor.Position.ToString();
+        	}
         }// dyn. beh.
         
+        void mainFormMove(object sender, EventArgs e){
+        	
+        }
+        
         void sform_load(object sedner, EventArgs e){
-			//searchWindow.BackColor = Color.Red; //Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
+//			searchWindow.BackColor = Color.Red; //Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
             searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + Convert.ToInt32((double)searchWindow.Height / 1.5));
         }
         

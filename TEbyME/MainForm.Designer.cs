@@ -159,6 +159,7 @@ namespace TEbyME
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Size = new System.Drawing.Size(901, 109);
             this.searchPanel.TabIndex = 0;
+            this.searchPanel.BorderStyle = BorderStyle.Fixed3D;
             // 
             // title
             // 
@@ -170,6 +171,9 @@ namespace TEbyME
             this.title.TabIndex = 0;
             this.title.Text = "Search and Replace";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.title.MouseDown += sform_mouse_down;
+            this.title.MouseUp += sform_mouse_up;
+            this.title.MouseMove += sform_move;
             // 
             // minMaxSearch
             // 
@@ -353,7 +357,9 @@ namespace TEbyME
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEbyME v1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.SizeChanged += new System.EventHandler(sform_sizeeventhandler);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
+            this.Move += new System.EventHandler(mainFormMove);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.searchPanel.ResumeLayout(false);
@@ -363,7 +369,6 @@ namespace TEbyME
             this.mainLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.RichTextBox textArea;
