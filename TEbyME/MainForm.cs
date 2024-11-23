@@ -102,7 +102,6 @@ namespace TEbyME
 			}
         }
         
-        // dyn. beh
         void sform_mouse_down(object sender, EventArgs e){
         	swm.is_swindow_mouse_down = true;
         	swm.dx = Cursor.Position.X - searchWindow.Location.X;
@@ -111,14 +110,36 @@ namespace TEbyME
         
         void sform_mouse_up(object sender, EventArgs e){
         	swm.is_swindow_mouse_down = false;
+        	
+        	if (is_search_popup_indow) return;
+        	
+        	if (searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 &&
+        	    searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width){
+        		mainLayoutPanel.RowStyles[0].Height = 0F;
+        		mainLayoutPanel.RowStyles[2].Height += 75F;
+        		minMaxSearch_Click(null, null);
+        	}
         }
         
         void sform_move(object sender, EventArgs e){
         	if (swm.is_swindow_mouse_down && !is_search_popup_indow){
         		searchWindow.Location = new Point(Cursor.Position.X - swm.dx, Cursor.Position.Y - swm.dy);
         		toolStripStatusLabel1.Text = searchWindow.Location.ToString() + Cursor.Position.ToString();
+        		
+        		if (searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 &&
+        		    searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width){
+        			if (mainLayoutPanel.RowStyles[0].Height == 0F){
+        				mainLayoutPanel.RowStyles[0].Height = 75F;
+                    	mainLayoutPanel.RowStyles[2].Height -= 75F;
+        			}
+        		}else{
+        			if (mainLayoutPanel.RowStyles[0].Height == 75F){
+        				mainLayoutPanel.RowStyles[0].Height = 0F;
+                    	mainLayoutPanel.RowStyles[2].Height += 75F;
+        			}
+        		}
         	}
-        }// dyn. beh.
+        }
         
         void mainFormMove(object sender, EventArgs e){
         	
@@ -126,7 +147,7 @@ namespace TEbyME
         
         void sform_load(object sedner, EventArgs e){
 //			searchWindow.BackColor = Color.Red; //Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
-            searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + Convert.ToInt32((double)searchWindow.Height / 1.5));
+        	searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
         }
         
         void sform_sizeeventhandler(object sender, EventArgs e){
@@ -442,10 +463,7 @@ namespace TEbyME
         private void minMaxSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
-            if (is_search_popup_indow)
-                is_search_popup_indow = false;
-            else
-                is_search_popup_indow = true;
+            is_search_popup_indow = !is_search_popup_indow;
             OpenAndCloseSearchAndReplaceWindow();
         }
 
@@ -455,7 +473,6 @@ namespace TEbyME
         }
 
         void Close_search(object sender_, CancelEventArgs e_, ref RichTextBox rtb){
-			//is_search_wind_open = false;
 			OpenAndCloseSearchAndReplaceWindow();
         }		
 		
