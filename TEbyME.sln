@@ -1,8 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-# SharpDevelop 4.4
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TEbyME", "TEbyME\TEbyME.csproj", "{BD419A99-4D76-43F2-B376-C458E0C08841}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{244D857F-B4BB-4D58-9CF9-3A13BB751428}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,9 +16,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BD419A99-4D76-43F2-B376-C458E0C08841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD419A99-4D76-43F2-B376-C458E0C08841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD419A99-4D76-43F2-B376-C458E0C08841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD419A99-4D76-43F2-B376-C458E0C08841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD419A99-4D76-43F2-B376-C458E0C08841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD419A99-4D76-43F2-B376-C458E0C08841}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
