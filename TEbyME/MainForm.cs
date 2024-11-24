@@ -126,6 +126,7 @@ namespace TEbyME
         	    searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width){
         		mainLayoutPanel.RowStyles[0].Height = 0F;
         		mainLayoutPanel.RowStyles[2].Height += 75F;
+        		searchWindow.Opacity = 1.0F;
         		minMaxSearch_Click(null, null);
         	}
         }
@@ -148,11 +149,13 @@ namespace TEbyME
         			if (mainLayoutPanel.RowStyles[0].Height == 0F){
         				mainLayoutPanel.RowStyles[0].Height = 75F;
                     	mainLayoutPanel.RowStyles[2].Height -= 75F;
+                    	searchWindow.Opacity = 0.65F;
         			}
         		}else{
         			if (mainLayoutPanel.RowStyles[0].Height == 75F){
         				mainLayoutPanel.RowStyles[0].Height = 0F;
                     	mainLayoutPanel.RowStyles[2].Height += 75F;
+                    	searchWindow.Opacity = 1.0F;
         			}
         		}
         	}
