@@ -37,8 +37,7 @@ namespace TEbyME
 		//end
 		
 		string filepath;
-		bool text_changed, is_search_replace_window_open, is_search_popup_window;
-		int screen_width;
+		bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load;
 		
 		struct SWindowMove{
 			public bool is_swindow_mouse_down;
@@ -64,9 +63,9 @@ namespace TEbyME
             is_search_replace_window_open = false;
 			is_search_popup_window = true;
 			swm.is_swindow_mouse_down = false;
+			sw_first_time_load = true;
 
             swm = new MainForm.SWindowMove();
-			swm.dy = 0;
 
             int hei = 113, wid = 663;
 			searchWindow = new Form()
@@ -109,8 +108,15 @@ namespace TEbyME
         
         void sform_mouse_down(object sender, EventArgs e){
             swm.is_swindow_mouse_down = true;
-            swm.dx = Cursor.Position.X - searchWindow.Location.X;
-            swm.dy = Cursor.Position.Y - searchWindow.Location.Y;
+            if(sw_first_time_load){
+            	sw_first_time_load = false;
+				swm.dx = Cursor.Position.X - this.Location.X - (this.Width - searchWindow.Width) / 2;
+				swm.dy = Cursor.Position.Y - this.Location.Y - searchWindow.Height / 2;
+            }
+            else{
+            	swm.dx = Cursor.Position.X - searchWindow.Location.X;
+				swm.dy = Cursor.Position.Y - searchWindow.Location.Y;
+            }
         }
         
         void sform_mouse_up(object sender, EventArgs e){
@@ -156,9 +162,6 @@ namespace TEbyME
 				OpenAndCloseSearchAndReplaceWindow();
 				is_search_popup_window = !is_search_popup_window;
 				OpenAndCloseSearchAndReplaceWindow();
-
-                searchWindow.Location = new Point(this.Location.X + cpx - swm.dx, this.Location.Y + cpy - swm.dy);
-				fileNameLabel.Text = searchWindow.Location.ToString();
             }
         }
         
@@ -437,8 +440,6 @@ namespace TEbyME
 			
 			SetWindowPos(search.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             search.StartPosition = FormStartPosition.Manual;
-			
-            search.Location = new Point((screen_width - search.Width) / 2, search.Location.Y);
 
             search.Show();
 		}
@@ -477,6 +478,7 @@ namespace TEbyME
             OpenAndCloseSearchAndReplaceWindow();
             is_search_popup_window = !is_search_popup_window;
             OpenAndCloseSearchAndReplaceWindow();
+            sw_first_time_load = !sw_first_time_load;
         }
 
         private void closeSearch_Click(object sender, EventArgs e)

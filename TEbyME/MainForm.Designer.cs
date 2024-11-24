@@ -186,7 +186,7 @@ namespace TEbyME
             this.minMaxSearch.TabIndex = 0;
             this.minMaxSearch.Text = "⬜";
             this.minMaxSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.minMaxSearch.Click += new System.EventHandler(this.minMaxSearch_Click);
+            this.minMaxSearch.MouseClick += this.minMaxSearch_Click;
             // 
             // closeSearch
             // 
@@ -198,7 +198,7 @@ namespace TEbyME
             this.closeSearch.TabIndex = 0;
             this.closeSearch.Text = "X";
             this.closeSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.closeSearch.Click += new System.EventHandler(this.closeSearch_Click);
+            this.closeSearch.MouseClick += this.closeSearch_Click;
             // 
             // searchTB
             // 
