@@ -51,9 +51,9 @@ namespace TEbyME
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.searchPanel = new System.Windows.Forms.Panel();
-            this.title = new System.Windows.Forms.Label();
-            this.minMaxSearch = new System.Windows.Forms.Label();
-            this.closeSearch = new System.Windows.Forms.Label();
+            this.title = new TEbyME.PLabel();
+            this.minMaxSearch = new TEbyME.PLabel();
+            this.closeSearch = new TEbyME.PLabel();
             this.searchTB = new System.Windows.Forms.TextBox();
             this.replaceTB = new System.Windows.Forms.TextBox();
             this.findBtn = new System.Windows.Forms.Button();
@@ -62,7 +62,7 @@ namespace TEbyME
             this.clearBtn = new System.Windows.Forms.Button();
             this.replaceAllBtn = new System.Windows.Forms.Button();
             this.replaceBtn = new System.Windows.Forms.Button();
-            this.fileNameLabel = new System.Windows.Forms.Label();
+            this.fileNameLabel = new TEbyME.PLabel();
             this.textArea = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -142,7 +142,8 @@ namespace TEbyME
             // 
             // searchPanel
             // 
-            this.searchPanel.BackColor = Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));// System.Drawing.Color.SlateGray;
+            this.searchPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
+            this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.searchPanel.Controls.Add(this.title);
             this.searchPanel.Controls.Add(this.minMaxSearch);
             this.searchPanel.Controls.Add(this.closeSearch);
@@ -159,7 +160,6 @@ namespace TEbyME
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Size = new System.Drawing.Size(901, 109);
             this.searchPanel.TabIndex = 0;
-            this.searchPanel.BorderStyle = BorderStyle.Fixed3D;
             // 
             // title
             // 
@@ -171,10 +171,7 @@ namespace TEbyME
             this.title.TabIndex = 0;
             this.title.Text = "Search and Replace";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.title.MouseDown += sform_mouse_down;
-            this.title.MouseUp += sform_mouse_up;
-            this.title.MouseMove += sform_move;
-            this.title.MouseDoubleClick += new MouseEventHandler(this.titleMouseDoubleClick);
+            this.title.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.titleMouseDoubleClick);
             // 
             // minMaxSearch
             // 
@@ -186,7 +183,6 @@ namespace TEbyME
             this.minMaxSearch.TabIndex = 0;
             this.minMaxSearch.Text = "⬜";
             this.minMaxSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.minMaxSearch.MouseClick += this.minMaxSearch_Click;
             // 
             // closeSearch
             // 
@@ -198,7 +194,6 @@ namespace TEbyME
             this.closeSearch.TabIndex = 0;
             this.closeSearch.Text = "X";
             this.closeSearch.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.closeSearch.MouseClick += this.closeSearch_Click;
             // 
             // searchTB
             // 
@@ -230,6 +225,7 @@ namespace TEbyME
             this.findBtn.Size = new System.Drawing.Size(75, 35);
             this.findBtn.TabIndex = 0;
             this.findBtn.Text = "Find";
+            this.findBtn.UseVisualStyleBackColor = false;
             // 
             // findNextBtn
             // 
@@ -240,6 +236,7 @@ namespace TEbyME
             this.findNextBtn.Size = new System.Drawing.Size(75, 35);
             this.findNextBtn.TabIndex = 0;
             this.findNextBtn.Text = "Next";
+            this.findNextBtn.UseVisualStyleBackColor = false;
             // 
             // findPrevBtn
             // 
@@ -261,6 +258,7 @@ namespace TEbyME
             this.clearBtn.Size = new System.Drawing.Size(75, 35);
             this.clearBtn.TabIndex = 0;
             this.clearBtn.Text = "Clear";
+            this.clearBtn.UseVisualStyleBackColor = false;
             // 
             // replaceAllBtn
             // 
@@ -271,6 +269,7 @@ namespace TEbyME
             this.replaceAllBtn.Size = new System.Drawing.Size(139, 35);
             this.replaceAllBtn.TabIndex = 0;
             this.replaceAllBtn.Text = "Replace All";
+            this.replaceAllBtn.UseVisualStyleBackColor = false;
             // 
             // replaceBtn
             // 
@@ -281,6 +280,7 @@ namespace TEbyME
             this.replaceBtn.Size = new System.Drawing.Size(109, 35);
             this.replaceBtn.TabIndex = 0;
             this.replaceBtn.Text = "Replace";
+            this.replaceBtn.UseVisualStyleBackColor = false;
             // 
             // fileNameLabel
             // 
@@ -352,8 +352,8 @@ namespace TEbyME
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEbyME v1.0";
-            this.SizeChanged += new System.EventHandler(sform_sizeeventhandler);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.SizeChanged += new System.EventHandler(this.sform_sizeeventhandler);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.searchPanel.ResumeLayout(false);
@@ -363,10 +363,12 @@ namespace TEbyME
             this.mainLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
+
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.RichTextBox textArea;
-        private System.Windows.Forms.Label fileNameLabel;
+        private PLabel fileNameLabel;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -375,7 +377,7 @@ namespace TEbyME
         private ToolStripStatusLabel status_label;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Panel searchPanel;
-        private Label minMaxSearch;
+        private PLabel minMaxSearch;
         private Button clearBtn;
         private Button findPrevBtn;
         private Button findBtn;
@@ -384,8 +386,8 @@ namespace TEbyME
         private Button replaceBtn;
         private TextBox replaceTB;
         private TextBox searchTB;
-        private Label closeSearch;
-        private Label title;
+        private PLabel closeSearch;
+        private PLabel title;
         private StatusStrip statusStrip1;
         private TableLayoutPanel mainLayoutPanel;
     }

@@ -25,17 +25,6 @@ namespace TEbyME
 
     public partial class MainForm : Form
     {
-        // make window do not disapear
-        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        private const UInt32 SWP_NOSIZE = 0x0001;
-        private const UInt32 SWP_NOMOVE = 0x0002;
-        private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-        //end
-
         string filepath;
         bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval;
 
@@ -62,11 +51,8 @@ namespace TEbyME
             //
             pathInit(path);
 
-            is_search_replace_window_open = false;
-            is_search_popup_window = true;
-            swm.is_swindow_mouse_down = false;
-            sw_first_time_load = true;
-            out_of_sw_move_interval = false;
+            is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
+            sw_first_time_load = is_search_popup_window = true;
 
             swm = new MainForm.SWindowMove();
 
@@ -77,16 +63,20 @@ namespace TEbyME
                 MaximumSize = new Size(wid, hei),
                 MinimumSize = new Size(wid, hei),
                 Font = new Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-                Name = "SearchWindow",
-                Text = "S&R",
+                Name = "searchWindow",
                 ShowIcon = false,
                 ControlBox = false,
                 StartPosition = FormStartPosition.Manual,
-                FormBorderStyle = FormBorderStyle.None,
+                FormBorderStyle = FormBorderStyle.None
             };
             searchWindow.Load += new System.EventHandler(this.SForm_Load);
 
-            SetWindowPos(searchWindow.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            this.closeSearch.MouseClick += closeSearch_Click;
+            this.minMaxSearch.MouseClick += minMaxSearch_Click;
+
+            this.title.MouseDown += sform_mouse_down;
+            this.title.MouseUp += sform_mouse_up;
+            this.title.MouseMove += sform_move;
         }
 
         void pathInit(string path)
@@ -194,8 +184,7 @@ namespace TEbyME
 
         private bool search_window_condition()
         {
-            return searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 && 
-                searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width;
+            return searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 && searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width;
         }
 
         private bool out_of_sw_interval_condition(int cpx, int cpy)
@@ -210,7 +199,7 @@ namespace TEbyME
                 if (WindowState == FormWindowState.Minimized)
                     searchWindow.Hide();
                 else
-                    searchWindow.Show();
+                    searchWindow.Show(this);
             }
         }
 
@@ -364,7 +353,7 @@ namespace TEbyME
                 {
                     SearchWindowOpt(true);
                     searchWindow.Controls.Add(searchPanel);
-                    searchWindow.Show();
+                    searchWindow.Show(this);
                     searchWindow.ActiveControl = searchTB;
                 }
             };
@@ -433,84 +422,6 @@ namespace TEbyME
         void FindToolStripMenuItemClick(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
-            return;
-
-            //            if (is_search_wind_open) return;
-
-            //			is_search_wind_open = true;
-            Form search = new Form()
-            {
-                Size = new Size(950, 150),
-                Font = new Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-                Name = "SearchWindow",
-                ShowIcon = false
-            };
-
-            //			search.Controls.Add(searchPanel);
-            search.Closing += delegate (object sender_, CancelEventArgs e_) { Close_search(sender_, e_, ref textArea); };
-
-            //			search.Show();
-
-            //			return;
-
-            TextBox stb = new TextBox()
-            {
-                Size = new Size(300, 50),
-                Location = new Point(25, 10),
-                TabIndex = 0,
-                Name = "STB"
-            };
-
-            Button sbt = new Button()
-            {
-                Size = new Size(130, 50),
-                Location = new Point(10, stb.Location.Y + stb.Height + 15),
-                Text = "Search",
-                TabIndex = 1,
-                Name = "SBT"
-            };
-
-            Button nextf = new Button()
-            {
-                Size = new Size(70, 50),
-                Location = new Point(sbt.Location.X + sbt.Width + 10, sbt.Location.Y),
-                Text = "Search next",
-                TabIndex = 2,
-                Name = "SBTNext",
-                Enabled = false,
-                Font = new Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-            };
-
-            Button prevf = new Button()
-            {
-                Size = new Size(70, 50),
-                Location = new Point(nextf.Location.X + nextf.Width + 10, sbt.Location.Y),
-                Text = "Search prev.",
-                TabIndex = 3,
-                Name = "SBTPrev",
-                Enabled = false,
-                Font = new Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-            };
-
-            List<int> searchResult = new List<int>();
-            int[] current_result_index = new int[2] { 0, 0 };
-
-            sbt.Click += delegate (object sender_, EventArgs e_) { Search_btn_click_inside_search_window(sender_, e_, ref search, ref searchResult, ref current_result_index); };
-            prevf.Click += delegate (object sender_, EventArgs e_) { Prev_search_btn_click(sender_, e_, searchResult, ref current_result_index); };
-            nextf.Click += delegate (object sender_, EventArgs e_) { Next_search_btn_click(sender_, e_, searchResult, ref current_result_index); };
-
-            search.Load += delegate (object sender_, EventArgs e_) { On_search_wind_load(sender_, e_, ref stb, ref search); };
-
-
-            search.Controls.Add(stb);
-            search.Controls.Add(sbt);
-            search.Controls.Add(nextf);
-            search.Controls.Add(prevf);
-
-            SetWindowPos(search.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-            search.StartPosition = FormStartPosition.Manual;
-
-            search.Show();
         }
 
         private void Next_search_btn_click(object sender_, EventArgs e_, List<int> searchResult, ref int[] current_result_index)
@@ -538,9 +449,10 @@ namespace TEbyME
             f.ActiveControl = tb;
         }
 
-        private void MainForm_Resize(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = Size.ToString();
+            searchWindow.DesktopLocation = new Point(this.Location.X + (this.Width - searchWindow.Width) / 2, this.Location.Y + 50);
+            this.MinimumSize = this.Size;
         }
 
         private void minMaxSearch_Click(object sender, EventArgs e)
@@ -552,11 +464,6 @@ namespace TEbyME
         }
 
         private void closeSearch_Click(object sender, EventArgs e)
-        {
-            OpenAndCloseSearchAndReplaceWindow();
-        }
-
-        void Close_search(object sender_, CancelEventArgs e_, ref RichTextBox rtb)
         {
             OpenAndCloseSearchAndReplaceWindow();
         }
@@ -584,6 +491,17 @@ namespace TEbyME
                 btns[0].Enabled = btns[1].Enabled = false;
                 MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+    }
+
+    public partial class PLabel : Label
+    {
+        private string text;
+
+        public override string Text
+        {
+            get { return text; }
+            set { if (value == null) value = text; if (text != value) { text = value; Refresh(); OnTextChanged(EventArgs.Empty); } }
         }
     }
 }
