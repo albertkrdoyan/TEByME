@@ -171,7 +171,7 @@ namespace TEbyME
             this.title.TabIndex = 0;
             this.title.Text = "Search and Replace";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.title.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.titleMouseDoubleClick);
+            this.title.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TitleMouseDoubleClick);
             // 
             // minMaxSearch
             // 
@@ -204,7 +204,7 @@ namespace TEbyME
             this.searchTB.Name = "searchTB";
             this.searchTB.Size = new System.Drawing.Size(325, 34);
             this.searchTB.TabIndex = 0;
-            this.searchTB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTB_KeyDown);
+            this.searchTB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchTB_KeyDown);
             // 
             // replaceTB
             // 
@@ -214,7 +214,7 @@ namespace TEbyME
             this.replaceTB.Location = new System.Drawing.Point(470, 32);
             this.replaceTB.Name = "replaceTB";
             this.replaceTB.Size = new System.Drawing.Size(300, 34);
-            this.replaceTB.TabIndex = 0;
+            this.replaceTB.TabIndex = 4;
             // 
             // findBtn
             // 
@@ -223,7 +223,7 @@ namespace TEbyME
             this.findBtn.Location = new System.Drawing.Point(140, 68);
             this.findBtn.Name = "findBtn";
             this.findBtn.Size = new System.Drawing.Size(75, 35);
-            this.findBtn.TabIndex = 0;
+            this.findBtn.TabIndex = 1;
             this.findBtn.Text = "Find";
             this.findBtn.UseVisualStyleBackColor = false;
             // 
@@ -234,7 +234,7 @@ namespace TEbyME
             this.findNextBtn.Location = new System.Drawing.Point(219, 68);
             this.findNextBtn.Name = "findNextBtn";
             this.findNextBtn.Size = new System.Drawing.Size(75, 35);
-            this.findNextBtn.TabIndex = 0;
+            this.findNextBtn.TabIndex = 2;
             this.findNextBtn.Text = "Next";
             this.findNextBtn.UseVisualStyleBackColor = false;
             // 
@@ -245,7 +245,7 @@ namespace TEbyME
             this.findPrevBtn.Location = new System.Drawing.Point(300, 68);
             this.findPrevBtn.Name = "findPrevBtn";
             this.findPrevBtn.Size = new System.Drawing.Size(105, 35);
-            this.findPrevBtn.TabIndex = 0;
+            this.findPrevBtn.TabIndex = 3;
             this.findPrevBtn.Text = "Previous";
             this.findPrevBtn.UseVisualStyleBackColor = false;
             // 
@@ -256,7 +256,7 @@ namespace TEbyME
             this.clearBtn.Location = new System.Drawing.Point(426, 68);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(75, 35);
-            this.clearBtn.TabIndex = 0;
+            this.clearBtn.TabIndex = 7;
             this.clearBtn.Text = "Clear";
             this.clearBtn.UseVisualStyleBackColor = false;
             // 
@@ -267,7 +267,7 @@ namespace TEbyME
             this.replaceAllBtn.Location = new System.Drawing.Point(630, 68);
             this.replaceAllBtn.Name = "replaceAllBtn";
             this.replaceAllBtn.Size = new System.Drawing.Size(139, 35);
-            this.replaceAllBtn.TabIndex = 0;
+            this.replaceAllBtn.TabIndex = 6;
             this.replaceAllBtn.Text = "Replace All";
             this.replaceAllBtn.UseVisualStyleBackColor = false;
             // 
@@ -278,7 +278,7 @@ namespace TEbyME
             this.replaceBtn.Location = new System.Drawing.Point(518, 68);
             this.replaceBtn.Name = "replaceBtn";
             this.replaceBtn.Size = new System.Drawing.Size(109, 35);
-            this.replaceBtn.TabIndex = 0;
+            this.replaceBtn.TabIndex = 5;
             this.replaceBtn.Text = "Replace";
             this.replaceBtn.UseVisualStyleBackColor = false;
             // 
@@ -353,7 +353,7 @@ namespace TEbyME
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEbyME v1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.SizeChanged += new System.EventHandler(this.sform_sizeeventhandler);
+            this.SizeChanged += new System.EventHandler(this.Sform_sizeeventhandler);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.searchPanel.ResumeLayout(false);

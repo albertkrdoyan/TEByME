@@ -8,14 +8,9 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace TEbyME
 {
@@ -35,9 +30,15 @@ namespace TEbyME
             public int mouse_x, mouse_y;
         }
 
-        SWindowMove swm;
+        struct SearchIN
+        {
+            public List<int> indices;
+            public int search_text_length, current_index;
+        }
 
-        private Form searchWindow;
+        readonly Form searchWindow;
+        SWindowMove swm;
+        SearchIN si;
 
         public MainForm(string path)
         {
@@ -49,12 +50,13 @@ namespace TEbyME
             //
             // TODO: Add constructor code after the InitializeComponent() call.
             //
-            pathInit(path);
+            PathInit(path);
 
             is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
             sw_first_time_load = is_search_popup_window = true;
 
             swm = new MainForm.SWindowMove();
+            si = new MainForm.SearchIN();
 
             int hei = 113, wid = 663;
             searchWindow = new Form()
@@ -71,15 +73,67 @@ namespace TEbyME
             };
             searchWindow.Load += new System.EventHandler(this.SForm_Load);
 
-            this.closeSearch.MouseClick += closeSearch_Click;
-            this.minMaxSearch.MouseClick += minMaxSearch_Click;
+            replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = false;
 
-            this.title.MouseDown += sform_mouse_down;
-            this.title.MouseUp += sform_mouse_up;
-            this.title.MouseMove += sform_move;
+            this.closeSearch.MouseClick += CloseSearch_Click;
+            this.minMaxSearch.MouseClick += MinMaxSearch_Click;
+
+            this.title.MouseDown += Sform_mouse_down;
+            this.title.MouseUp += Sform_mouse_up;
+            this.title.MouseMove += Sform_move;
+
+            this.findBtn.MouseClick += FindBtn_MouseClick;
+            this.findNextBtn.MouseClick += FindNextBtn_MouseClick;
+            this.findPrevBtn.MouseClick += FindPrevBtn_MouseClick;
         }
 
-        void pathInit(string path)
+        private void FindPrevBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e != null && e.Button != MouseButtons.Left) return;
+
+            if (e.Button != MouseButtons.Left) return;
+
+            if (--si.current_index == -1)
+                si.current_index = si.indices.Count - 1;
+
+            textArea.Select(si.indices[si.current_index], si.search_text_length);
+            textArea.Focus();
+        }
+
+        private void FindNextBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e != null && e.Button != MouseButtons.Left) return;
+
+            if (e.Button != MouseButtons.Left) return;
+
+            if (++si.current_index == si.indices.Count)
+                si.current_index = 0;
+
+            textArea.Select(si.indices[si.current_index], si.search_text_length);
+            textArea.Focus();
+        }
+
+        private void FindBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e != null && e.Button != MouseButtons.Left) return;
+
+            si.indices = SearchKMP(textArea.Text, searchTB.Text);
+            si.search_text_length = searchTB.Text.Length;
+
+            if (si.indices.Count == 0)
+                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+            {
+                replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = true;
+
+                si.current_index = 0;
+
+                textArea.Select(si.indices[0], si.search_text_length);
+                textArea.Focus();
+            }
+        }
+
+        void PathInit(string path)
         {
             if (path != string.Empty)
             {
@@ -104,7 +158,7 @@ namespace TEbyME
             }
         }
 
-        void sform_mouse_down(object sender, MouseEventArgs e)
+        void Sform_mouse_down(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
@@ -124,40 +178,40 @@ namespace TEbyME
             swm.mouse_y = Cursor.Position.Y;
         }
 
-        void sform_mouse_up(object sender, MouseEventArgs e)
+        void Sform_mouse_up(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
             swm.is_swindow_mouse_down = false;
 
-            if (!is_search_popup_window && search_window_condition())
+            if (!is_search_popup_window && Search_window_condition())
             {
                 mainLayoutPanel.RowStyles[0].Height = 0F;
                 mainLayoutPanel.RowStyles[2].Height += 75F;
                 searchWindow.Opacity = 1.0F;
-                minMaxSearch_Click(null, null);
+                MinMaxSearch_Click(null, null);
                 out_of_sw_move_interval = false;
             }
         }
 
-        void titleMouseDoubleClick(object sender, MouseEventArgs e)
+        void TitleMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!is_search_popup_window) minMaxSearch_Click(null, null);
+            if (!is_search_popup_window) MinMaxSearch_Click(null, null);
         }
 
-        void sform_move(object sender, MouseEventArgs e)
+        void Sform_move(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
             int cpx = Cursor.Position.X, cpy = Cursor.Position.Y;
 
-            if (swm.is_swindow_mouse_down && !is_search_popup_window && out_of_sw_interval_condition(cpx, cpy))
+            if (swm.is_swindow_mouse_down && !is_search_popup_window && Out_of_sw_interval_condition(cpx, cpy))
             {
                 out_of_sw_move_interval = true;
                 searchWindow.Location = new Point(cpx - swm.dx, cpy - swm.dy);
                 toolStripStatusLabel1.Text = searchWindow.Location.ToString() + Cursor.Position.ToString();
 
-                if (search_window_condition())
+                if (Search_window_condition())
                 {
                     if (mainLayoutPanel.RowStyles[0].Height == 0F)
                     {
@@ -174,7 +228,7 @@ namespace TEbyME
                 }
             }
 
-            if (out_of_sw_interval_condition(cpx, cpy) && swm.is_swindow_mouse_down && is_search_popup_window)
+            if (Out_of_sw_interval_condition(cpx, cpy) && swm.is_swindow_mouse_down && is_search_popup_window)
             {
                 OpenAndCloseSearchAndReplaceWindow();
                 is_search_popup_window = !is_search_popup_window;
@@ -182,17 +236,17 @@ namespace TEbyME
             }
         }
 
-        private bool search_window_condition()
+        private bool Search_window_condition()
         {
             return searchWindow.Location.Y > this.Location.Y + 5 && searchWindow.Location.Y < this.Location.Y + 100 && searchWindow.Location.X > this.Location.X + 10 && searchWindow.Location.X < this.Location.X + this.Width - searchWindow.Width;
         }
 
-        private bool out_of_sw_interval_condition(int cpx, int cpy)
+        private bool Out_of_sw_interval_condition(int cpx, int cpy)
         {
             return out_of_sw_move_interval || (cpx < swm.mouse_x - 35 || cpx > swm.mouse_x + 35) || (cpy < swm.mouse_y - 35 || cpy > swm.mouse_y + 35);
         }
 
-        void sform_sizeeventhandler(object sender, EventArgs e)
+        private void Sform_sizeeventhandler(object sender, EventArgs e)
         {
             if (!is_search_popup_window && is_search_replace_window_open)
             {
@@ -269,6 +323,8 @@ namespace TEbyME
         private void SForm_Load(object sender, EventArgs e)
         {
             searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
+            //replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = false;
+            //searchTB.Text = replaceTB.Text = "";
         }
 
         void SearchWindowOpt(bool to_window)
@@ -359,16 +415,21 @@ namespace TEbyME
             };
         }
 
-        void searchTB_KeyDown(object sender, KeyEventArgs e)
+        void SearchTB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
                 OpenAndCloseSearchAndReplaceWindow();
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
             }
+            else if (e.KeyCode == Keys.Enter) 
+            {
+                FindBtn_MouseClick(null, null);
+                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }
         }
 
-        List<int> SearchKMP(ref string text, ref string pattern)
+        private List<int> SearchKMP(string text, string pattern)
         {
             List<int> arr = SetupKMP(ref pattern);
             int frst = 0, sec = 0;
@@ -444,18 +505,13 @@ namespace TEbyME
             textArea.Focus();
         }
 
-        void On_search_wind_load(object sender_, EventArgs e_, ref TextBox tb, ref Form f)
-        {
-            f.ActiveControl = tb;
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             searchWindow.DesktopLocation = new Point(this.Location.X + (this.Width - searchWindow.Width) / 2, this.Location.Y + 50);
             this.MinimumSize = this.Size;
         }
 
-        private void minMaxSearch_Click(object sender, EventArgs e)
+        private void MinMaxSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
             is_search_popup_window = !is_search_popup_window;
@@ -463,34 +519,9 @@ namespace TEbyME
             sw_first_time_load = !sw_first_time_load;
         }
 
-        private void closeSearch_Click(object sender, EventArgs e)
+        private void CloseSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
-        }
-
-        void Search_btn_click_inside_search_window(object sender, EventArgs e, ref Form f, ref List<int> searchResult, ref int[] current_result_index)
-        {
-            Button sbt = (Button)f.Controls.Find("SBT", true)[0];
-            TextBox patt = (TextBox)f.Controls.Find("STB", true)[0];
-            sbt.Text = "New Search";
-
-            string text_ = textArea.Text, patt_ = patt.Text;
-            searchResult = SearchKMP(ref text_, ref patt_);
-            Button[] btns = new Button[2] { (Button)f.Controls.Find("SBTNext", true)[0], (Button)f.Controls.Find("SBTPrev", true)[0] };
-
-            if (searchResult.Count != 0)
-            {
-                btns[0].Enabled = btns[1].Enabled = true;
-                current_result_index = new int[2] { 0, patt_.Length };
-
-                textArea.Select(searchResult[current_result_index[0]], current_result_index[1]);
-                textArea.Focus();
-            }
-            else
-            {
-                btns[0].Enabled = btns[1].Enabled = false;
-                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
     }
 
