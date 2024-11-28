@@ -34,7 +34,8 @@ namespace TEbyME
         {
             public LinkedListNode<int> current;
             public LinkedList<int> indices;
-            public int search_text_length;
+            public int search_text_length, offset, offset_index;
+            public bool show;
         }
 
         readonly Form searchWindow;
@@ -86,16 +87,35 @@ namespace TEbyME
             this.findBtn.MouseClick += FindBtn_MouseClick;
             this.findNextBtn.MouseClick += FindNextBtn_MouseClick;
             this.findPrevBtn.MouseClick += FindPrevBtn_MouseClick;
+
+            this.replaceBtn.MouseClick += ReplaceBtn_MouseClick;
+            this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
+        }
+
+        private void ReplaceAllBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+
+
+        }
+
+        private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+
+
         }
 
         private void FindPrevBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e != null && e.Button != MouseButtons.Left) return;
-
             if (e.Button != MouseButtons.Left) return;
             
-            if ((si.current = si.current.Previous) == null)
-                si.current = si.indices.Last;
+            if (si.show)
+            {
+                if ((si.current = si.current.Previous) == null)
+                    si.current = si.indices.Last;
+            }                
+            else si.show = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
@@ -103,12 +123,14 @@ namespace TEbyME
 
         private void FindNextBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e != null && e.Button != MouseButtons.Left) return;
-
             if (e.Button != MouseButtons.Left) return;
 
-            if ((si.current = si.current.Next) == null)
-                si.current = si.indices.First;
+            if (si.show)
+            {
+                if ((si.current = si.current.Next) == null)
+                    si.current = si.indices.First;
+            }                
+            else si.show = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
@@ -128,6 +150,7 @@ namespace TEbyME
                 replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = true;
 
                 si.current = si.indices.First;
+                si.show = true;
 
                 textArea.Select(si.current.Value, si.search_text_length);
                 textArea.Focus();
