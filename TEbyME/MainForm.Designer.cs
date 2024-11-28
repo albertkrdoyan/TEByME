@@ -51,6 +51,7 @@ namespace TEbyME
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.searchPanel = new System.Windows.Forms.Panel();
+            this.lorwecaseCHB = new System.Windows.Forms.CheckBox();
             this.title = new TEbyME.PLabel();
             this.minMaxSearch = new TEbyME.PLabel();
             this.closeSearch = new TEbyME.PLabel();
@@ -144,6 +145,7 @@ namespace TEbyME
             // 
             this.searchPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))));
             this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.searchPanel.Controls.Add(this.lorwecaseCHB);
             this.searchPanel.Controls.Add(this.title);
             this.searchPanel.Controls.Add(this.minMaxSearch);
             this.searchPanel.Controls.Add(this.closeSearch);
@@ -158,12 +160,26 @@ namespace TEbyME
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.searchPanel.Location = new System.Drawing.Point(4, 4);
             this.searchPanel.Name = "searchPanel";
-            this.searchPanel.Size = new System.Drawing.Size(901, 109);
+            this.searchPanel.Size = new System.Drawing.Size(901, 144);
             this.searchPanel.TabIndex = 0;
+            // 
+            // lorwecaseCHB
+            // 
+            this.lorwecaseCHB.AutoSize = true;
+            this.lorwecaseCHB.BackColor = System.Drawing.Color.GhostWhite;
+            this.lorwecaseCHB.Location = new System.Drawing.Point(140, 32);
+            this.lorwecaseCHB.Name = "lorwecaseCHB";
+            this.lorwecaseCHB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lorwecaseCHB.Size = new System.Drawing.Size(102, 32);
+            this.lorwecaseCHB.TabIndex = 2;
+            this.lorwecaseCHB.Text = "Lower  ";
+            this.lorwecaseCHB.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lorwecaseCHB.UseCompatibleTextRendering = true;
+            this.lorwecaseCHB.UseVisualStyleBackColor = false;
             // 
             // title
             // 
-            this.title.BackColor = System.Drawing.SystemColors.Control;
+            this.title.BackColor = System.Drawing.Color.GhostWhite;
             this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(140, 3);
             this.title.Name = "title";
@@ -175,7 +191,7 @@ namespace TEbyME
             // 
             // minMaxSearch
             // 
-            this.minMaxSearch.BackColor = System.Drawing.SystemColors.Control;
+            this.minMaxSearch.BackColor = System.Drawing.Color.GhostWhite;
             this.minMaxSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.minMaxSearch.Location = new System.Drawing.Point(713, 3);
             this.minMaxSearch.Name = "minMaxSearch";
@@ -186,7 +202,7 @@ namespace TEbyME
             // 
             // closeSearch
             // 
-            this.closeSearch.BackColor = System.Drawing.SystemColors.Control;
+            this.closeSearch.BackColor = System.Drawing.Color.GhostWhite;
             this.closeSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeSearch.Location = new System.Drawing.Point(744, 3);
             this.closeSearch.Name = "closeSearch";
@@ -197,95 +213,95 @@ namespace TEbyME
             // 
             // searchTB
             // 
-            this.searchTB.BackColor = System.Drawing.SystemColors.Control;
+            this.searchTB.BackColor = System.Drawing.Color.GhostWhite;
             this.searchTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.searchTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchTB.Location = new System.Drawing.Point(139, 32);
+            this.searchTB.Location = new System.Drawing.Point(246, 32);
             this.searchTB.Name = "searchTB";
-            this.searchTB.Size = new System.Drawing.Size(325, 34);
+            this.searchTB.Size = new System.Drawing.Size(266, 34);
             this.searchTB.TabIndex = 0;
             this.searchTB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchTB_KeyDown);
             // 
             // replaceTB
             // 
-            this.replaceTB.BackColor = System.Drawing.SystemColors.Control;
+            this.replaceTB.BackColor = System.Drawing.Color.GhostWhite;
             this.replaceTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.replaceTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.replaceTB.Location = new System.Drawing.Point(470, 32);
+            this.replaceTB.Location = new System.Drawing.Point(518, 32);
             this.replaceTB.Name = "replaceTB";
-            this.replaceTB.Size = new System.Drawing.Size(300, 34);
-            this.replaceTB.TabIndex = 4;
+            this.replaceTB.Size = new System.Drawing.Size(252, 34);
+            this.replaceTB.TabIndex = 5;
             // 
             // findBtn
             // 
-            this.findBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.findBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.findBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.findBtn.Location = new System.Drawing.Point(140, 68);
             this.findBtn.Name = "findBtn";
             this.findBtn.Size = new System.Drawing.Size(75, 35);
-            this.findBtn.TabIndex = 1;
+            this.findBtn.TabIndex = 2;
             this.findBtn.Text = "Find";
             this.findBtn.UseVisualStyleBackColor = false;
             // 
             // findNextBtn
             // 
-            this.findNextBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.findNextBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.findNextBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.findNextBtn.Location = new System.Drawing.Point(219, 68);
             this.findNextBtn.Name = "findNextBtn";
             this.findNextBtn.Size = new System.Drawing.Size(75, 35);
-            this.findNextBtn.TabIndex = 2;
+            this.findNextBtn.TabIndex = 3;
             this.findNextBtn.Text = "Next";
             this.findNextBtn.UseVisualStyleBackColor = false;
             // 
             // findPrevBtn
             // 
-            this.findPrevBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.findPrevBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.findPrevBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.findPrevBtn.Location = new System.Drawing.Point(300, 68);
             this.findPrevBtn.Name = "findPrevBtn";
             this.findPrevBtn.Size = new System.Drawing.Size(105, 35);
-            this.findPrevBtn.TabIndex = 3;
+            this.findPrevBtn.TabIndex = 4;
             this.findPrevBtn.Text = "Previous";
             this.findPrevBtn.UseVisualStyleBackColor = false;
             // 
             // clearBtn
             // 
-            this.clearBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.clearBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.clearBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearBtn.Location = new System.Drawing.Point(426, 68);
+            this.clearBtn.Location = new System.Drawing.Point(424, 68);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(75, 35);
-            this.clearBtn.TabIndex = 7;
+            this.clearBtn.TabIndex = 8;
             this.clearBtn.Text = "Clear";
             this.clearBtn.UseVisualStyleBackColor = false;
             // 
             // replaceAllBtn
             // 
-            this.replaceAllBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.replaceAllBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.replaceAllBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.replaceAllBtn.Location = new System.Drawing.Point(630, 68);
             this.replaceAllBtn.Name = "replaceAllBtn";
             this.replaceAllBtn.Size = new System.Drawing.Size(139, 35);
-            this.replaceAllBtn.TabIndex = 6;
+            this.replaceAllBtn.TabIndex = 7;
             this.replaceAllBtn.Text = "Replace All";
             this.replaceAllBtn.UseVisualStyleBackColor = false;
             // 
             // replaceBtn
             // 
-            this.replaceBtn.BackColor = System.Drawing.SystemColors.Control;
+            this.replaceBtn.BackColor = System.Drawing.Color.GhostWhite;
             this.replaceBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.replaceBtn.Location = new System.Drawing.Point(518, 68);
             this.replaceBtn.Name = "replaceBtn";
             this.replaceBtn.Size = new System.Drawing.Size(109, 35);
-            this.replaceBtn.TabIndex = 5;
+            this.replaceBtn.TabIndex = 6;
             this.replaceBtn.Text = "Replace";
             this.replaceBtn.UseVisualStyleBackColor = false;
             // 
             // fileNameLabel
             // 
             this.fileNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileNameLabel.Location = new System.Drawing.Point(4, 2);
+            this.fileNameLabel.Location = new System.Drawing.Point(4, 152);
             this.fileNameLabel.Name = "fileNameLabel";
             this.fileNameLabel.Size = new System.Drawing.Size(901, 27);
             this.fileNameLabel.TabIndex = 1;
@@ -298,10 +314,10 @@ namespace TEbyME
             this.textArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.textArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
-            this.textArea.Location = new System.Drawing.Point(4, 34);
+            this.textArea.Location = new System.Drawing.Point(4, 184);
             this.textArea.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textArea.Name = "textArea";
-            this.textArea.Size = new System.Drawing.Size(901, 509);
+            this.textArea.Size = new System.Drawing.Size(901, 395);
             this.textArea.TabIndex = 0;
             this.textArea.Text = "";
             this.textArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextAreaKeyDown);
@@ -390,5 +406,6 @@ namespace TEbyME
         private PLabel title;
         private StatusStrip statusStrip1;
         private TableLayoutPanel mainLayoutPanel;
+        private CheckBox lorwecaseCHB;
     }
 }

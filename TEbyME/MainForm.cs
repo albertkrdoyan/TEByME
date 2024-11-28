@@ -32,8 +32,9 @@ namespace TEbyME
 
         struct SearchIN
         {
-            public List<int> indices;
-            public int search_text_length, current_index;
+            public LinkedListNode<int> current;
+            public LinkedList<int> indices;
+            public int search_text_length;
         }
 
         readonly Form searchWindow;
@@ -92,11 +93,11 @@ namespace TEbyME
             if (e != null && e.Button != MouseButtons.Left) return;
 
             if (e.Button != MouseButtons.Left) return;
+            
+            if ((si.current = si.current.Previous) == null)
+                si.current = si.indices.Last;
 
-            if (--si.current_index == -1)
-                si.current_index = si.indices.Count - 1;
-
-            textArea.Select(si.indices[si.current_index], si.search_text_length);
+            textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
         }
 
@@ -106,10 +107,10 @@ namespace TEbyME
 
             if (e.Button != MouseButtons.Left) return;
 
-            if (++si.current_index == si.indices.Count)
-                si.current_index = 0;
+            if ((si.current = si.current.Next) == null)
+                si.current = si.indices.First;
 
-            textArea.Select(si.indices[si.current_index], si.search_text_length);
+            textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
         }
 
@@ -117,7 +118,7 @@ namespace TEbyME
         {
             if (e != null && e.Button != MouseButtons.Left) return;
 
-            si.indices = SearchKMP(textArea.Text, searchTB.Text);
+            si.indices = SearchKMP((lorwecaseCHB.Checked == false ? textArea.Text : textArea.Text.ToLower()), searchTB.Text);
             si.search_text_length = searchTB.Text.Length;
 
             if (si.indices.Count == 0)
@@ -126,9 +127,9 @@ namespace TEbyME
             {
                 replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = true;
 
-                si.current_index = 0;
+                si.current = si.indices.First;
 
-                textArea.Select(si.indices[0], si.search_text_length);
+                textArea.Select(si.current.Value, si.search_text_length);
                 textArea.Focus();
             }
         }
@@ -429,11 +430,11 @@ namespace TEbyME
             }
         }
 
-        private List<int> SearchKMP(string text, string pattern)
+        private LinkedList<int> SearchKMP(string text, string pattern)
         {
             List<int> arr = SetupKMP(ref pattern);
             int frst = 0, sec = 0;
-            List<int> searchs = new List<int>();
+            LinkedList<int> searchs = new LinkedList<int>();
 
             while (frst < text.Length)
             {
@@ -443,7 +444,7 @@ namespace TEbyME
                     sec++;
                     if (sec == pattern.Length)
                     {
-                        searchs.Add(frst - pattern.Length);
+                        searchs.AddLast(frst - pattern.Length);
                         sec = 0;
                     }
                 }
@@ -457,7 +458,7 @@ namespace TEbyME
             return searchs;
         }
 
-        List<int> SetupKMP(ref string s)
+        private List<int> SetupKMP(ref string s)
         {
             List<int> arr = new List<int>(new int[s.Length]);
             int frst = 0, sec = 1;
@@ -483,26 +484,6 @@ namespace TEbyME
         void FindToolStripMenuItemClick(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
-        }
-
-        private void Next_search_btn_click(object sender_, EventArgs e_, List<int> searchResult, ref int[] current_result_index)
-        {
-            if (++current_result_index[0] == searchResult.Count)
-                current_result_index[0] = 0;
-
-            textArea.Select(searchResult[current_result_index[0]], current_result_index[1]);
-            textArea.Select(searchResult[current_result_index[0]], current_result_index[1]);
-            textArea.Focus();
-        }
-
-        private void Prev_search_btn_click(object sender_, EventArgs e_, List<int> searchResult, ref int[] current_result_index)
-        {
-            if (--current_result_index[0] == -1)
-                current_result_index[0] = searchResult.Count - 1;
-
-            textArea.Select(searchResult[current_result_index[0]], current_result_index[1]);
-            textArea.Select(searchResult[current_result_index[0]], current_result_index[1]);
-            textArea.Focus();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
