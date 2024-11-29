@@ -1,1 +1,58 @@
 Implement replace functionality.
+
+class Solution {
+    int counter = 0;
+    void BFS(vector<vector<int>>& grid, vector<pair<int, pair<int, int>>>& prev) { // i * w + j -> bestV, {i, j}
+        vector<int> dirX = {-1, 0, 1, 0};
+        vector<int> dirY = {0, -1, 0, 1};
+
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<>> pq;
+        pq.push({0, {0, 0}});
+        prev[0] = {0, {-1, -1}};
+
+        while (!pq.empty()){
+            auto [val, coord] = pq.top();
+            auto [i, j] = coord;
+            pq.pop();
+
+            if (i == grid.size() - 1 && j == grid[0].size() - 1) return;
+
+            for (int k = 0; k < 4; ++k){
+                int _i = i + dirY[k], _j = j + dirX[k], ind = _i * grid[0].size() + _j;
+                if ((_i != -1 && _i != grid.size()) && (_j != -1 && _j != grid[0].size())){
+                    if (val + grid[_i][_j] < prev[ind].first){
+                        prev[ind] = {val + grid[_i][_j], {i, j}};
+                        pq.push({prev[ind].first, {_i, _j}});
+                        counter++;
+                    }
+                }
+            }
+        }
+    }
+public:
+    int minimumTime(vector<vector<int>>& grid) {
+        if (grid[0][1] > 1 && grid[1][0] > 1) return -1;
+
+        vector<pair<int, pair<int, int>>> prev(grid.size() * grid[0].size(), {INT32_MAX, {-1, -1}});
+
+        // for (const auto&line: grid){
+        //     for (const auto&el: line)
+        //         cout << el << " ";
+        //     cout << "\n";
+        // }
+
+        BFS(grid, prev);
+
+        cout << grid.size() * grid[0].size() << " " << counter;
+
+        // for (int i = 0; i < grid.size(); ++i){
+        //     for (int j = 0; j < grid[0].size(); ++j){
+        //         auto [val, coords] = prev[i * grid[0].size() + j];
+        //         auto &[_i, _j] = coords;
+        //         cout << "{" << i << ", " << j << "}"  << " | Val : " << val << " - {" << _i << ", " << _j << "}\n";
+        //     }
+        // }
+
+        return 1;
+    }
+};
