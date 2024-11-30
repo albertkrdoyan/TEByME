@@ -35,7 +35,7 @@ namespace TEbyME
             public LinkedListNode<int> current;
             public LinkedList<int> indices;
             public int search_text_length, offset, offset_index;
-            public bool show;
+            public bool show_next;
         }
 
         readonly Form searchWindow;
@@ -96,26 +96,42 @@ namespace TEbyME
         {
             if (e.Button != MouseButtons.Left) return;
 
-
+            if (si.indices.Count == 0)
+            {
+                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
         }
 
         private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
+            if (si.indices.Count == 0)
+            {
+                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
+            
         }
 
         private void FindPrevBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
+
+            if (si.indices.Count == 0)
+            {
+                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             
-            if (si.show)
+            if (si.show_next)
             {
                 if ((si.current = si.current.Previous) == null)
                     si.current = si.indices.Last;
             }                
-            else si.show = true;
+            else si.show_next = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
@@ -125,12 +141,18 @@ namespace TEbyME
         {
             if (e.Button != MouseButtons.Left) return;
 
-            if (si.show)
+            if (si.indices.Count == 0)
+            {
+                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (si.show_next)
             {
                 if ((si.current = si.current.Next) == null)
                     si.current = si.indices.First;
             }                
-            else si.show = true;
+            else si.show_next = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
@@ -150,7 +172,7 @@ namespace TEbyME
                 replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = true;
 
                 si.current = si.indices.First;
-                si.show = true;
+                si.show_next = true;
 
                 textArea.Select(si.current.Value, si.search_text_length);
                 textArea.Focus();
