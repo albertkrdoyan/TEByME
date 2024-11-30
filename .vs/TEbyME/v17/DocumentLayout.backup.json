@@ -22,12 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -38,11 +34,11 @@
               "Title": "MainForm.cs",
               "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
-              "RelativeToolTip": "TEbyME\\MainForm.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAgwCQAAABAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs*",
+              "RelativeToolTip": "TEbyME\\MainForm.cs*",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAewJcAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-05T11:34:43.508Z",
+              "WhenOpened": "2024-11-30T12:17:10.844Z",
               "EditorCaption": ""
             },
             {
@@ -55,7 +51,8 @@
               "RelativeToolTip": "TEbyME\\MainForm.Designer.cs",
               "ViewState": "AgIAAEwBAAAAAAAAAAAWwFwBAAB5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-05T13:25:29.221Z"
+              "WhenOpened": "2024-11-05T13:25:29.221Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -63,10 +60,11 @@
               "Title": "MainForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs [Design]",
-              "RelativeToolTip": "TEbyME\\MainForm.cs [Design]",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs [Design]*",
+              "RelativeToolTip": "TEbyME\\MainForm.cs [Design]*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-10T20:14:20.282Z"
+              "WhenOpened": "2024-11-10T20:14:20.282Z",
+              "EditorCaption": " [Design]"
             }
           ]
         },

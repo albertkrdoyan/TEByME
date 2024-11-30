@@ -170,7 +170,7 @@ namespace TEbyME
             this.lorwecaseCHB.Location = new System.Drawing.Point(140, 32);
             this.lorwecaseCHB.Name = "lorwecaseCHB";
             this.lorwecaseCHB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lorwecaseCHB.Size = new System.Drawing.Size(102, 32);
+            this.lorwecaseCHB.Size = new System.Drawing.Size(70, 21);
             this.lorwecaseCHB.TabIndex = 2;
             this.lorwecaseCHB.Text = "Lower  ";
             this.lorwecaseCHB.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -301,7 +301,7 @@ namespace TEbyME
             // fileNameLabel
             // 
             this.fileNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileNameLabel.Location = new System.Drawing.Point(4, 152);
+            this.fileNameLabel.Location = new System.Drawing.Point(4, 2);
             this.fileNameLabel.Name = "fileNameLabel";
             this.fileNameLabel.Size = new System.Drawing.Size(901, 27);
             this.fileNameLabel.TabIndex = 1;
@@ -314,10 +314,10 @@ namespace TEbyME
             this.textArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.textArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
-            this.textArea.Location = new System.Drawing.Point(4, 184);
+            this.textArea.Location = new System.Drawing.Point(4, 34);
             this.textArea.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textArea.Name = "textArea";
-            this.textArea.Size = new System.Drawing.Size(901, 395);
+            this.textArea.Size = new System.Drawing.Size(901, 509);
             this.textArea.TabIndex = 0;
             this.textArea.Text = "";
             this.textArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextAreaKeyDown);

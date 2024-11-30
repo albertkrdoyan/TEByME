@@ -113,7 +113,23 @@ namespace TEbyME
                 return;
             }
 
-            
+            //int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
+
+            //textArea.Text = textArea.Text.Substring(0, curr_val)
+            //    + replaceTB.Text
+            //    + textArea.Text.Substring(curr_val + si.search_text_length, textArea.TextLength - curr_val - si.search_text_length);
+
+            //si.offset += replaceTB.TextLength - si.search_text_length;
+            //si.offset_index = (curr_val < si.offset_index ? curr_val : si.offset_index);
+            //si.show_next = false;
+
+            //textArea.Select(curr_val, replaceTB.TextLength);
+            //textArea.Focus();
+
+            //LinkedListNode<int> del_curr = si.current;
+            //if (si.indices.Count != 1 && (si.current = si.current.Next) == null)
+            //    si.current = si.indices.First;
+            //si.indices.Remove(del_curr);            
         }
 
         private void FindPrevBtn_MouseClick(object sender, MouseEventArgs e)
@@ -133,7 +149,9 @@ namespace TEbyME
             }                
             else si.show_next = true;
 
-            textArea.Select(si.current.Value, si.search_text_length);
+            int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
+
+            textArea.Select(curr_val, si.search_text_length);
             textArea.Focus();
         }
 
@@ -154,7 +172,9 @@ namespace TEbyME
             }                
             else si.show_next = true;
 
-            textArea.Select(si.current.Value, si.search_text_length);
+            int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
+
+            textArea.Select(curr_val, si.search_text_length);
             textArea.Focus();
         }
 
@@ -173,6 +193,8 @@ namespace TEbyME
 
                 si.current = si.indices.First;
                 si.show_next = true;
+                si.offset = 0;
+                si.offset_index = 0;
 
                 textArea.Select(si.current.Value, si.search_text_length);
                 textArea.Focus();
