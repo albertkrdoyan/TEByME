@@ -34,7 +34,7 @@ namespace TEbyME
         {
             public LinkedListNode<int> current;
             public LinkedList<int> indices;
-            public int search_text_length, offset, offset_index;
+            public int search_text_length;
             public bool show_next;
         }
 
@@ -75,7 +75,7 @@ namespace TEbyME
             };
             searchWindow.Load += new System.EventHandler(this.SForm_Load);
 
-            replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = false;
+            findPrevBtn.Enabled = findNextBtn.Enabled = false;
 
             this.closeSearch.MouseClick += CloseSearch_Click;
             this.minMaxSearch.MouseClick += MinMaxSearch_Click;
@@ -90,53 +90,91 @@ namespace TEbyME
 
             this.replaceBtn.MouseClick += ReplaceBtn_MouseClick;
             this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
+
+            this.clearBtn.MouseClick += ClearBtn_MouseClick;
+        }
+
+        private void ClearBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+
+            replaceTB.Text = searchTB.Text = "";
+            lorwecaseCHB.Checked = false;
+            findNextBtn.Enabled = findPrevBtn.Enabled = false;
+
+            si.current = null;
+            si.indices.Clear();
+            si.search_text_length = 0;
+            si.show_next = false;
         }
 
         private void ReplaceAllBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            if (si.indices.Count == 0)
-            {
-                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (si.current == null)
+                FindBtn_MouseClick(Keys.Enter, null);
+
+            if (si.current == null)
                 return;
+
+            string newText = textArea.Text.Substring(0, si.indices.First.Value);
+
+            for (LinkedListNode<int> curr = si.indices.First;  curr != null; curr = curr.Next)
+            {
+                newText += replaceTB.Text + textArea.Text.Substring(curr.Value + si.search_text_length,
+                    (curr.Next != null ? curr.Next.Value - curr.Value - si.search_text_length: textArea.TextLength - curr.Value - si.search_text_length));
             }
+
+            si.current = null;
+            si.indices.Clear();
+            si.search_text_length = 0;
+            si.show_next = false;
+
+            textArea.Text = newText;
         }
 
         private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            if (si.indices.Count == 0)
-            {
-                MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (si.current == null)
+                FindBtn_MouseClick(Keys.Enter, null);
+
+            if (si.current == null)
                 return;
+
+            int offset = replaceTB.TextLength - si.search_text_length;
+            si.show_next = false;
+
+            textArea.Text = textArea.Text.Substring(0, si.current.Value)
+                + replaceTB.Text
+                + textArea.Text.Substring(si.current.Value + si.search_text_length, textArea.TextLength - si.current.Value - si.search_text_length);
+
+            textArea.Select(si.current.Value, replaceTB.TextLength);
+            textArea.Focus();
+
+            LinkedListNode<int> curr = si.current.Next;
+
+            while (curr != null)
+            {
+                curr.Value += offset;
+                curr = curr.Next;
             }
 
-            //int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
+            curr = si.current;
 
-            //textArea.Text = textArea.Text.Substring(0, curr_val)
-            //    + replaceTB.Text
-            //    + textArea.Text.Substring(curr_val + si.search_text_length, textArea.TextLength - curr_val - si.search_text_length);
+            if ((si.current = si.current.Next) == null)
+                si.current = si.indices.First;
 
-            //si.offset += replaceTB.TextLength - si.search_text_length;
-            //si.offset_index = (curr_val < si.offset_index ? curr_val : si.offset_index);
-            //si.show_next = false;
-
-            //textArea.Select(curr_val, replaceTB.TextLength);
-            //textArea.Focus();
-
-            //LinkedListNode<int> del_curr = si.current;
-            //if (si.indices.Count != 1 && (si.current = si.current.Next) == null)
-            //    si.current = si.indices.First;
-            //si.indices.Remove(del_curr);            
+            si.indices.Remove(curr);
         }
 
         private void FindPrevBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            if (si.indices.Count == 0)
+            if (si.current == null)
             {
                 MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -149,9 +187,7 @@ namespace TEbyME
             }                
             else si.show_next = true;
 
-            int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
-
-            textArea.Select(curr_val, si.search_text_length);
+            textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
         }
 
@@ -172,9 +208,7 @@ namespace TEbyME
             }                
             else si.show_next = true;
 
-            int curr_val = (si.current.Value < si.offset_index ? si.current.Value : si.current.Value + si.offset);
-
-            textArea.Select(curr_val, si.search_text_length);
+            textArea.Select(si.current.Value, si.search_text_length);
             textArea.Focus();
         }
 
@@ -189,15 +223,17 @@ namespace TEbyME
                 MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
             {
-                replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = true;
+                findPrevBtn.Enabled = findNextBtn.Enabled = true;
 
                 si.current = si.indices.First;
-                si.show_next = true;
-                si.offset = 0;
-                si.offset_index = 0;
 
-                textArea.Select(si.current.Value, si.search_text_length);
-                textArea.Focus();
+                if (e != null || (Keys)sender == Keys.Enter)
+                {
+                    si.show_next = true;
+
+                    textArea.Select(si.current.Value, si.search_text_length);
+                    textArea.Focus();
+                }
             }
         }
 
@@ -391,8 +427,6 @@ namespace TEbyME
         private void SForm_Load(object sender, EventArgs e)
         {
             searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
-            //replaceAllBtn.Enabled = replaceBtn.Enabled = findPrevBtn.Enabled = findNextBtn.Enabled = false;
-            //searchTB.Text = replaceTB.Text = "";
         }
 
         void SearchWindowOpt(bool to_window)
@@ -492,7 +526,7 @@ namespace TEbyME
             }
             else if (e.KeyCode == Keys.Enter) 
             {
-                FindBtn_MouseClick(null, null);
+                FindBtn_MouseClick(Keys.Enter, null);
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
             }
         }
