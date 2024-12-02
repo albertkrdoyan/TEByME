@@ -91,7 +91,8 @@ namespace TEbyME
             this.replaceBtn.MouseClick += ReplaceBtn_MouseClick;
             this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
 
-            this.clearBtn.MouseClick += ClearBtn_MouseClick;
+            this.clearBtn.MouseClick += ClearBtn_MouseClick;            
+            //this.searchTB.TextChanged += SearchTB_TextChanged;
         }
 
         private void ClearBtn_MouseClick(object sender, MouseEventArgs e)
@@ -110,7 +111,7 @@ namespace TEbyME
 
         private void ReplaceAllBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left) return;
+            if (e.Button != MouseButtons.Left || replaceTB.TextLength == 0) return;
 
             if (si.current == null)
                 FindBtn_MouseClick(Keys.Enter, null);
@@ -126,17 +127,14 @@ namespace TEbyME
                     (curr.Next != null ? curr.Next.Value - curr.Value - si.search_text_length: textArea.TextLength - curr.Value - si.search_text_length));
             }
 
-            si.current = null;
-            si.indices.Clear();
-            si.search_text_length = 0;
-            si.show_next = false;
+            si = new SearchIN();
 
             textArea.Text = newText;
         }
 
         private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left) return;
+            if (e.Button != MouseButtons.Left || replaceTB.TextLength == 0) return;
 
             if (si.current == null)
                 FindBtn_MouseClick(Keys.Enter, null);
@@ -214,9 +212,9 @@ namespace TEbyME
 
         private void FindBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e != null && e.Button != MouseButtons.Left) return;
+            if (e != null && e.Button != MouseButtons.Left || searchTB.TextLength == 0) return;
 
-            si.indices = SearchKMP((lorwecaseCHB.Checked == false ? textArea.Text : textArea.Text.ToLower()), searchTB.Text);
+            si.indices = SearchKMP((lorwecaseCHB.Checked ? textArea.Text.ToLower() : textArea.Text), (lorwecaseCHB.Checked ? searchTB.Text.ToLower() : searchTB.Text));
             si.search_text_length = searchTB.Text.Length;
 
             if (si.indices.Count == 0)
@@ -258,7 +256,7 @@ namespace TEbyME
             else
             {
                 filepath = "";
-                text_changed = true;
+                text_changed = false;
             }
         }
 
@@ -363,13 +361,34 @@ namespace TEbyME
 
         void NewToolStripMenuItemClick(object sender, EventArgs e)
         {
+            if (text_changed)
+            {
+                DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Unsaved file!", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                if (res == DialogResult.Yes)
+                    SaveToolStripMenuItemClick(null, null);
+                else if (res == DialogResult.Cancel)
+                    return;
+            }
+
             filepath = "";
             textArea.Text = "";
-            fileNameLabel.Text = "New*";
+            fileNameLabel.Text = "New";
+            text_changed = false;
         }
 
         void OpenToolStripMenuItemClick(object sender, EventArgs e)
         {
+            if (text_changed)
+            {
+                DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Unsaved file!", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                if (res == DialogResult.Yes)
+                    SaveToolStripMenuItemClick(null, null);
+                else if (res == DialogResult.Cancel)
+                    return;
+            }
+
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -419,11 +438,12 @@ namespace TEbyME
                         }
                         for (int i = last_slash + 1; i < filepath.Length; ++i)
                             fileNameLabel.Text += filepath[i];
+
+                        new_file = false;
+                        text_changed = false;
                     }
-                }
-                new_file = false;
-            }
-            text_changed = false;
+                }                
+            }            
         }
 
         private void SForm_Load(object sender, EventArgs e)
@@ -607,7 +627,7 @@ namespace TEbyME
                 text_changed = true;
                 fileNameLabel.Text += "*";
             }
-        	new_file = false;
+        	if (new_file) new_file = false;
         }
         
         void MainFormFormClosing(object sender, FormClosingEventArgs e)
