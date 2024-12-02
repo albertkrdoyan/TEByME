@@ -21,7 +21,7 @@ namespace TEbyME
     public partial class MainForm : Form
     {
         string filepath;
-        bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval;
+        bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
 
         struct SWindowMove
         {
@@ -55,7 +55,7 @@ namespace TEbyME
             PathInit(path);
 
             is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
-            sw_first_time_load = is_search_popup_window = true;
+            sw_first_time_load = is_search_popup_window = new_file = true;
 
             swm = new MainForm.SWindowMove();
             si = new MainForm.SearchIN();
@@ -375,13 +375,14 @@ namespace TEbyME
                 openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
 
-                text_changed = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = openFileDialog.FileName;
                     textArea.Text = File.ReadAllText(filePath);
                     fileNameLabel.Text = openFileDialog.SafeFileName;
                     filepath = openFileDialog.FileName;
+                    text_changed = false;
+                    new_file = false;
                 }
             }
         }
@@ -420,6 +421,7 @@ namespace TEbyME
                             fileNameLabel.Text += filepath[i];
                     }
                 }
+                new_file = false;
             }
             text_changed = false;
         }
@@ -467,14 +469,6 @@ namespace TEbyME
                 string pasttext = Clipboard.GetText();
                 textArea.SelectedText = pasttext;
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else
-            {
-                if (text_changed == false)
-                {
-                    text_changed = true;
-                    fileNameLabel.Text += "*";
-                }
             }
         }
 
@@ -604,6 +598,27 @@ namespace TEbyME
         private void CloseSearch_Click(object sender, EventArgs e)
         {
             OpenAndCloseSearchAndReplaceWindow();
+        }
+        
+        void TextAreaTextChanged(object sender, EventArgs e)
+        {
+        	if (text_changed == false)
+            {
+                text_changed = true;
+                fileNameLabel.Text += "*";
+            }
+        	new_file = false;
+        }
+        
+        void MainFormFormClosing(object sender, FormClosingEventArgs e)
+        {
+        	if (new_file) return;
+        	
+        	DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+        	if (res == DialogResult.Yes)
+				SaveToolStripMenuItemClick(null, null);
+        	else if (res == DialogResult.Cancel)
+				e.Cancel = true;
         }
     }
 
