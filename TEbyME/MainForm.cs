@@ -612,7 +612,7 @@ namespace TEbyME
         
         void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
-        	if (new_file) return;
+        	if (new_file || !text_changed) return;
         	
         	DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
         	if (res == DialogResult.Yes)
