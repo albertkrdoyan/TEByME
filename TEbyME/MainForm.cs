@@ -414,6 +414,8 @@ namespace TEbyME
                 if (text_changed == true)
                 {
                     fileNameLabel.Text = fileNameLabel.Text.Substring(0, fileNameLabel.Text.Length - 1);
+                    text_changed = false;
+                    new_file = false;
                 }
             }
             else
