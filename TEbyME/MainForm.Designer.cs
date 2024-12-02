@@ -302,7 +302,7 @@ namespace TEbyME
         	this.fileNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
         	this.fileNameLabel.Location = new System.Drawing.Point(4, 2);
         	this.fileNameLabel.Name = "fileNameLabel";
-        	this.fileNameLabel.Size = new System.Drawing.Size(903, 27);
+        	this.fileNameLabel.Size = new System.Drawing.Size(904, 27);
         	this.fileNameLabel.TabIndex = 1;
         	this.fileNameLabel.Text = "New*";
         	this.fileNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -316,7 +316,7 @@ namespace TEbyME
         	this.textArea.Location = new System.Drawing.Point(4, 34);
         	this.textArea.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
         	this.textArea.Name = "textArea";
-        	this.textArea.Size = new System.Drawing.Size(903, 514);
+        	this.textArea.Size = new System.Drawing.Size(904, 514);
         	this.textArea.TabIndex = 0;
         	this.textArea.Text = "";
         	this.textArea.TextChanged += new System.EventHandler(this.TextAreaTextChanged);
@@ -339,7 +339,7 @@ namespace TEbyME
         	// 
         	this.mainLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
         	this.mainLayoutPanel.ColumnCount = 1;
-        	this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 909F));
+        	this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 910F));
         	this.mainLayoutPanel.Controls.Add(this.fileNameLabel, 0, 1);
         	this.mainLayoutPanel.Controls.Add(this.textArea, 0, 2);
         	this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -367,7 +367,7 @@ namespace TEbyME
         	this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
         	this.Name = "MainForm";
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-        	this.Text = "TEbyME v1.0";
+        	this.Text = "Text Editor by M.E. | v1.2";
         	this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
         	this.Load += new System.EventHandler(this.MainForm_Load);
         	this.SizeChanged += new System.EventHandler(this.Sform_sizeeventhandler);
