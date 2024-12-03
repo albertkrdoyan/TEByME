@@ -20,17 +20,17 @@ namespace TEbyME
 
     public partial class MainForm : Form
     {
-        string filepath;
-        bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
+        private string filepath;
+        private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
 
-        struct SWindowMove
+        private struct SWindowMove
         {
             public bool is_swindow_mouse_down;
             public int dx, dy;
             public int mouse_x, mouse_y;
         }
 
-        struct SearchIN
+        private struct SearchIN
         {
             public LinkedListNode<int> current;
             public LinkedList<int> indices;
@@ -38,9 +38,9 @@ namespace TEbyME
             public bool show_next;
         }
 
-        readonly Form searchWindow;
-        SWindowMove swm;
-        SearchIN si;
+        private Form searchWindow;
+        private SWindowMove swm;
+        private SearchIN si;
 
         public MainForm(string path)
         {
@@ -52,10 +52,39 @@ namespace TEbyME
             //
             // TODO: Add constructor code after the InitializeComponent() call.
             //
+            
             PathInit(path);
+            OtherInits();
+        }
+        
+        private void PathInit(string path)
+        {
+            if (path != string.Empty)
+            {
+                filepath = path;
+                textArea.Text = File.ReadAllText(filepath);
+                text_changed = false;
 
-            is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
-            sw_first_time_load = is_search_popup_window = new_file = true;
+                fileNameLabel.Text = "";
+                int last_slash = -1;
+                for (int i = 0; i < filepath.Length; ++i)
+                {
+                    if (filepath[i] == '\\')
+                        last_slash = i;
+                }
+                for (int i = last_slash + 1; i < filepath.Length; ++i)
+                    fileNameLabel.Text += filepath[i];
+            }
+            else
+            {
+                filepath = "";
+                text_changed = false;
+            }
+        }
+        
+        private void OtherInits(){
+        	is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
+            is_search_popup_window = sw_first_time_load = new_file = true;
 
             swm = new MainForm.SWindowMove();
             si = new MainForm.SearchIN();
@@ -91,8 +120,10 @@ namespace TEbyME
             this.replaceBtn.MouseClick += ReplaceBtn_MouseClick;
             this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
 
-            this.clearBtn.MouseClick += ClearBtn_MouseClick;            
-            //this.searchTB.TextChanged += SearchTB_TextChanged;
+            this.clearBtn.MouseClick += ClearBtn_MouseClick;
+            
+//            this.searchWindow.KeyPress += FindToolStripMenuItemClick;
+//            this.searchTB.TextChanged += SearchTB_TextChanged;
         }
 
         private void ClearBtn_MouseClick(object sender, MouseEventArgs e)
@@ -103,10 +134,7 @@ namespace TEbyME
             lorwecaseCHB.Checked = false;
             findNextBtn.Enabled = findPrevBtn.Enabled = false;
 
-            si.current = null;
-            si.indices.Clear();
-            si.search_text_length = 0;
-            si.show_next = false;
+            si = new MainForm.SearchIN();
         }
 
         private void ReplaceAllBtn_MouseClick(object sender, MouseEventArgs e)
@@ -235,32 +263,7 @@ namespace TEbyME
             }
         }
 
-        void PathInit(string path)
-        {
-            if (path != string.Empty)
-            {
-                filepath = path;
-                textArea.Text = File.ReadAllText(filepath);
-                text_changed = false;
-
-                fileNameLabel.Text = "";
-                int last_slash = -1;
-                for (int i = 0; i < filepath.Length; ++i)
-                {
-                    if (filepath[i] == '\\')
-                        last_slash = i;
-                }
-                for (int i = last_slash + 1; i < filepath.Length; ++i)
-                    fileNameLabel.Text += filepath[i];
-            }
-            else
-            {
-                filepath = "";
-                text_changed = false;
-            }
-        }
-
-        void Sform_mouse_down(object sender, MouseEventArgs e)
+        private void Sform_mouse_down(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
@@ -279,8 +282,8 @@ namespace TEbyME
             swm.mouse_x = Cursor.Position.X;
             swm.mouse_y = Cursor.Position.Y;
         }
-
-        void Sform_mouse_up(object sender, MouseEventArgs e)
+       
+        private void Sform_mouse_up(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
@@ -295,13 +298,35 @@ namespace TEbyME
                 out_of_sw_move_interval = false;
             }
         }
+        
+        private void TextAreaKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string pasttext = Clipboard.GetText();
+                textArea.SelectedText = pasttext;
+                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }
+        }
+        
+        private void SearchTB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) 
+            {
+                FindBtn_MouseClick(Keys.Enter, null);
+                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }else if (e.KeyCode == Keys.Escape && is_search_replace_window_open){
+            	OpenAndCloseSearchAndReplaceWindow();
+            	e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }
+        }
 
-        void TitleMouseDoubleClick(object sender, MouseEventArgs e)
+        private void TitleMouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (!is_search_popup_window) MinMaxSearch_Click(null, null);
         }
 
-        void Sform_move(object sender, MouseEventArgs e)
+        private void Sform_move(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
@@ -359,7 +384,7 @@ namespace TEbyME
             }
         }
 
-        void NewToolStripMenuItemClick(object sender, EventArgs e)
+        private void NewToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (text_changed)
             {
@@ -377,7 +402,7 @@ namespace TEbyME
             text_changed = false;
         }
 
-        void OpenToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (text_changed)
             {
@@ -406,7 +431,7 @@ namespace TEbyME
             }
         }
 
-        void SaveToolStripMenuItemClick(object sender, EventArgs e)
+        private void SaveToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (filepath != "")
             {
@@ -453,7 +478,7 @@ namespace TEbyME
             searchWindow.Location = new Point(this.Location.X + (searchWindow.Width / 5), this.Location.Y + searchWindow.Height);
         }
 
-        void SearchWindowOpt(bool to_window)
+        private void SearchWindowOpt(bool to_window)
         {
             foreach (Control c in searchPanel.Controls)
             {
@@ -461,36 +486,6 @@ namespace TEbyME
                     c.Location = new Point(c.Location.X - 125, c.Location.Y);
                 else
                     c.Location = new Point(c.Location.X + 125, c.Location.Y);
-            }
-        }
-
-        void TextAreaKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.S)       // Ctrl-S Save
-            {
-                SaveToolStripMenuItemClick(null, null);
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.Control && e.KeyCode == Keys.O)
-            {
-                OpenToolStripMenuItemClick(null, null);
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.Control && e.KeyCode == Keys.N)
-            {
-                NewToolStripMenuItemClick(null, null);
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.Control && e.KeyCode == Keys.F)
-            {
-                OpenAndCloseSearchAndReplaceWindow();
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.Control && e.KeyCode == Keys.V)
-            {
-                string pasttext = Clipboard.GetText();
-                textArea.SelectedText = pasttext;
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
             }
         }
 
@@ -531,22 +526,54 @@ namespace TEbyME
                     searchWindow.ActiveControl = searchTB;
                 }
             };
-        }
+        }        
 
-        void SearchTB_KeyDown(object sender, KeyEventArgs e)
+        private void FindToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.F)
-            {
-                OpenAndCloseSearchAndReplaceWindow();
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
-            else if (e.KeyCode == Keys.Enter) 
-            {
-                FindBtn_MouseClick(Keys.Enter, null);
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
+            if (!is_search_replace_window_open) OpenAndCloseSearchAndReplaceWindow();
+            else searchTB.Focus();
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            searchWindow.DesktopLocation = new Point(this.Location.X + (this.Width - searchWindow.Width) / 2, this.Location.Y + 50);
+            this.MinimumSize = this.Size;
+        }
+
+        private void MinMaxSearch_Click(object sender, EventArgs e)
+        {
+            OpenAndCloseSearchAndReplaceWindow();
+            is_search_popup_window = !is_search_popup_window;
+            OpenAndCloseSearchAndReplaceWindow();
+            sw_first_time_load = !sw_first_time_load;
+        }
+
+        private void CloseSearch_Click(object sender, EventArgs e)
+        {
+            OpenAndCloseSearchAndReplaceWindow();
+        }
+        
+        private void TextAreaTextChanged(object sender, EventArgs e)
+        {
+        	if (text_changed == false)
+            {
+                text_changed = true;
+                fileNameLabel.Text += "*";
+            }
+        	if (new_file) new_file = false;
+        }
+        
+        private void MainFormFormClosing(object sender, FormClosingEventArgs e)
+        {
+        	if (new_file || !text_changed) return;
+        	
+        	DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+        	if (res == DialogResult.Yes)
+				SaveToolStripMenuItemClick(null, null);
+        	else if (res == DialogResult.Cancel)
+				e.Cancel = true;
+        }
+        
         private LinkedList<int> SearchKMP(string text, string pattern)
         {
             List<int> arr = SetupKMP(ref pattern);
@@ -597,54 +624,9 @@ namespace TEbyME
 
             return arr;
         }
-
-        void FindToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            OpenAndCloseSearchAndReplaceWindow();
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            searchWindow.DesktopLocation = new Point(this.Location.X + (this.Width - searchWindow.Width) / 2, this.Location.Y + 50);
-            this.MinimumSize = this.Size;
-        }
-
-        private void MinMaxSearch_Click(object sender, EventArgs e)
-        {
-            OpenAndCloseSearchAndReplaceWindow();
-            is_search_popup_window = !is_search_popup_window;
-            OpenAndCloseSearchAndReplaceWindow();
-            sw_first_time_load = !sw_first_time_load;
-        }
-
-        private void CloseSearch_Click(object sender, EventArgs e)
-        {
-            OpenAndCloseSearchAndReplaceWindow();
-        }
-        
-        void TextAreaTextChanged(object sender, EventArgs e)
-        {
-        	if (text_changed == false)
-            {
-                text_changed = true;
-                fileNameLabel.Text += "*";
-            }
-        	if (new_file) new_file = false;
-        }
-        
-        void MainFormFormClosing(object sender, FormClosingEventArgs e)
-        {
-        	if (new_file || !text_changed) return;
-        	
-        	DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-        	if (res == DialogResult.Yes)
-				SaveToolStripMenuItemClick(null, null);
-        	else if (res == DialogResult.Cancel)
-				e.Cancel = true;
-        }
     }
 
-    public partial class PLabel : Label
+    public partial class NoCopyLabel : Label
     {
         private string text;
 
@@ -655,3 +637,5 @@ namespace TEbyME
         }
     }
 }
+//Несоответствие между архитектурой процессора проекта "MSIL", построение которого выполняется, и архитектурой процессора ссылки "C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll", "x86". Это несоответствие может привести к ошибкам во время выполнения. Попробуйте изменить целевую архитектуру процессора для проекта с помощью диспетчера конфигураций, чтобы согласовать архитектуры процессоров для проекта и ссылок, или используйте зависимость от ссылок с архитектурой процессора, соответствующей целевой архитектуре процессора проекта. (MSB3270)
+//Несоответствие между архитектурой процессора проекта "MSIL", построение которого выполняется, и архитектурой процессора ссылки "System.Data", "AMD64". Это несоответствие может привести к ошибкам во время выполнения. Попробуйте изменить целевую архитектуру процессора для проекта с помощью диспетчера конфигураций, чтобы согласовать архитектуры процессоров для проекта и ссылок, или используйте зависимость от ссылок с архитектурой процессора, соответствующей целевой архитектуре процессора проекта. (MSB3270)

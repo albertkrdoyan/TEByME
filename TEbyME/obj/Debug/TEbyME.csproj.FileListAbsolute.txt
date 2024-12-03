@@ -86,9 +86,9 @@ C:\Users\alber\Desktop\TEbyME v1.1\TEbyME\obj\Debug\TEbyME.pdb
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\bin\Debug\TEbyME.exe.config
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\bin\Debug\TEbyME.exe
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\bin\Debug\TEbyME.pdb
-C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.csprojResolveAssemblyReference.cache
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.MainForm.resources
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.Resource1.resources
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.csproj.GenerateResource.Cache
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.exe
 C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.pdb
+C:\Users\User\Desktop\CPP\TEByME\TEbyME\obj\Debug\TEbyME.csprojResolveAssemblyReference.cache

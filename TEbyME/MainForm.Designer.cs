@@ -52,9 +52,9 @@ namespace TEbyME
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.searchPanel = new System.Windows.Forms.Panel();
             this.lorwecaseCHB = new System.Windows.Forms.CheckBox();
-            this.title = new TEbyME.PLabel();
-            this.minMaxSearch = new TEbyME.PLabel();
-            this.closeSearch = new TEbyME.PLabel();
+            this.title = new TEbyME.NoCopyLabel();
+            this.minMaxSearch = new TEbyME.NoCopyLabel();
+            this.closeSearch = new TEbyME.NoCopyLabel();
             this.searchTB = new System.Windows.Forms.TextBox();
             this.replaceTB = new System.Windows.Forms.TextBox();
             this.findBtn = new System.Windows.Forms.Button();
@@ -63,7 +63,7 @@ namespace TEbyME
             this.clearBtn = new System.Windows.Forms.Button();
             this.replaceAllBtn = new System.Windows.Forms.Button();
             this.replaceBtn = new System.Windows.Forms.Button();
-            this.fileNameLabel = new TEbyME.PLabel();
+            this.fileNameLabel = new TEbyME.NoCopyLabel();
             this.textArea = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -358,7 +358,7 @@ namespace TEbyME
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SlateGray;
-            this.ClientSize = new System.Drawing.Size(906, 603);
+            this.ClientSize = new System.Drawing.Size(920, 603);
             this.Controls.Add(this.mainLayoutPanel);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -368,7 +368,7 @@ namespace TEbyME
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Text Editor by M.E. | v1.3.0";
+            this.Text = "Text Editor by M.E. | V2.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.SizeChanged += new System.EventHandler(this.Sform_sizeeventhandler);
@@ -386,7 +386,7 @@ namespace TEbyME
 
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.RichTextBox textArea;
-        private PLabel fileNameLabel;
+        private NoCopyLabel fileNameLabel;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -395,7 +395,7 @@ namespace TEbyME
         private ToolStripStatusLabel status_label;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Panel searchPanel;
-        private PLabel minMaxSearch;
+        private NoCopyLabel minMaxSearch;
         private Button clearBtn;
         private Button findPrevBtn;
         private Button findBtn;
@@ -404,8 +404,8 @@ namespace TEbyME
         private Button replaceBtn;
         private TextBox replaceTB;
         private TextBox searchTB;
-        private PLabel closeSearch;
-        private PLabel title;
+        private NoCopyLabel closeSearch;
+        private NoCopyLabel title;
         private StatusStrip statusStrip1;
         private TableLayoutPanel mainLayoutPanel;
         private CheckBox lorwecaseCHB;
