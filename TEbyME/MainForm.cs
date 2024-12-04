@@ -23,6 +23,17 @@ namespace TEbyME
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
 
+        struct Command
+        {
+            public string type;
+            public int index, length;
+            public string data;
+        }
+        struct History
+        {   
+            public Stack<Command> undo;
+            public Stack<Command> redo;
+        }
         private struct SWindowMove
         {
             public bool is_swindow_mouse_down;
