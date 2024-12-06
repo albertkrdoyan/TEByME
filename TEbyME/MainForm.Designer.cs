@@ -49,9 +49,15 @@ namespace TEbyME
         	this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        	this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+        	this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+        	this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.themesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.lightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.darkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.searchPanel = new System.Windows.Forms.Panel();
         	this.lorwecaseCHB = new System.Windows.Forms.CheckBox();
         	this.title = new TEbyME.NoCopyLabel();
@@ -73,7 +79,6 @@ namespace TEbyME
         	this.pastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.statusStrip1 = new System.Windows.Forms.StatusStrip();
         	this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-        	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
         	this.menuStrip1.SuspendLayout();
         	this.searchPanel.SuspendLayout();
         	this.contextMenuStrip1.SuspendLayout();
@@ -109,7 +114,7 @@ namespace TEbyME
         	this.newToolStripMenuItem.Image = global::TEbyME.Resource1.new_file;
         	this.newToolStripMenuItem.Name = "newToolStripMenuItem";
         	this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-        	this.newToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+        	this.newToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
         	this.newToolStripMenuItem.Text = "New              ";
         	this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItemClick);
         	// 
@@ -118,7 +123,7 @@ namespace TEbyME
         	this.openToolStripMenuItem.Image = global::TEbyME.Resource1.open_file;
         	this.openToolStripMenuItem.Name = "openToolStripMenuItem";
         	this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-        	this.openToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+        	this.openToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
         	this.openToolStripMenuItem.Text = "Open";
         	this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
         	// 
@@ -127,18 +132,9 @@ namespace TEbyME
         	this.saveToolStripMenuItem.Image = global::TEbyME.Resource1.save_file;
         	this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
         	this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-        	this.saveToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+        	this.saveToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
         	this.saveToolStripMenuItem.Text = "Save";
         	this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
-        	// 
-        	// findToolStripMenuItem
-        	// 
-        	this.findToolStripMenuItem.Image = global::TEbyME.Resource1.find;
-        	this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-        	this.findToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-        	this.findToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
-        	this.findToolStripMenuItem.Text = "Find";
-        	this.findToolStripMenuItem.Click += new System.EventHandler(this.FindToolStripMenuItemClick);
         	// 
         	// saveAsToolStripMenuItem
         	// 
@@ -146,9 +142,23 @@ namespace TEbyME
         	this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
         	this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
         	        	        	| System.Windows.Forms.Keys.S)));
-        	this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+        	this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
         	this.saveAsToolStripMenuItem.Text = "Save As";
         	this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItemClick);
+        	// 
+        	// toolStripSeparator1
+        	// 
+        	this.toolStripSeparator1.Name = "toolStripSeparator1";
+        	this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
+        	// 
+        	// findToolStripMenuItem
+        	// 
+        	this.findToolStripMenuItem.Image = global::TEbyME.Resource1.find;
+        	this.findToolStripMenuItem.Name = "findToolStripMenuItem";
+        	this.findToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+        	this.findToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
+        	this.findToolStripMenuItem.Text = "Find";
+        	this.findToolStripMenuItem.Click += new System.EventHandler(this.FindToolStripMenuItemClick);
         	// 
         	// menuStrip1
         	// 
@@ -157,12 +167,54 @@ namespace TEbyME
         	this.menuStrip1.ForeColor = System.Drawing.Color.Black;
         	this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
         	this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-        	        	        	this.fileToolStripMenuItem});
+        	        	        	this.fileToolStripMenuItem,
+        	        	        	this.windowToolStripMenuItem});
         	this.menuStrip1.Location = new System.Drawing.Point(0, 0);
         	this.menuStrip1.Name = "menuStrip1";
         	this.menuStrip1.Size = new System.Drawing.Size(920, 28);
         	this.menuStrip1.TabIndex = 11;
         	this.menuStrip1.Text = "menuStrip1";
+        	// 
+        	// windowToolStripMenuItem
+        	// 
+        	this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.themesToolStripMenuItem});
+        	this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+        	this.windowToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
+        	this.windowToolStripMenuItem.Text = "Window";
+        	// 
+        	// themesToolStripMenuItem
+        	// 
+        	this.themesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.defaultToolStripMenuItem,
+        	        	        	this.lightToolStripMenuItem,
+        	        	        	this.darkToolStripMenuItem});
+        	this.themesToolStripMenuItem.Name = "themesToolStripMenuItem";
+        	this.themesToolStripMenuItem.Size = new System.Drawing.Size(129, 24);
+        	this.themesToolStripMenuItem.Text = "Themes";
+        	// 
+        	// defaultToolStripMenuItem
+        	// 
+        	this.defaultToolStripMenuItem.Checked = true;
+        	this.defaultToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+        	this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
+        	this.defaultToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+        	this.defaultToolStripMenuItem.Text = "Default";
+        	this.defaultToolStripMenuItem.Click += new System.EventHandler(this.DefaultToolStripMenuItemClick);
+        	// 
+        	// lightToolStripMenuItem
+        	// 
+        	this.lightToolStripMenuItem.Name = "lightToolStripMenuItem";
+        	this.lightToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+        	this.lightToolStripMenuItem.Text = "Light";
+        	this.lightToolStripMenuItem.Click += new System.EventHandler(this.LightToolStripMenuItemClick);
+        	// 
+        	// darkToolStripMenuItem
+        	// 
+        	this.darkToolStripMenuItem.Name = "darkToolStripMenuItem";
+        	this.darkToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+        	this.darkToolStripMenuItem.Text = "Dark";
+        	this.darkToolStripMenuItem.Click += new System.EventHandler(this.DarkToolStripMenuItemClick);
         	// 
         	// searchPanel
         	// 
@@ -183,13 +235,14 @@ namespace TEbyME
         	this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
         	this.searchPanel.Location = new System.Drawing.Point(4, 4);
         	this.searchPanel.Name = "searchPanel";
-        	this.searchPanel.Size = new System.Drawing.Size(901, 144);
+        	this.searchPanel.Size = new System.Drawing.Size(928, 194);
         	this.searchPanel.TabIndex = 0;
         	// 
         	// lorwecaseCHB
         	// 
         	this.lorwecaseCHB.AutoSize = true;
         	this.lorwecaseCHB.BackColor = System.Drawing.Color.GhostWhite;
+        	this.lorwecaseCHB.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.lorwecaseCHB.Location = new System.Drawing.Point(140, 32);
         	this.lorwecaseCHB.Name = "lorwecaseCHB";
         	this.lorwecaseCHB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -204,6 +257,7 @@ namespace TEbyME
         	// 
         	this.title.BackColor = System.Drawing.Color.GhostWhite;
         	this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.title.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.title.Location = new System.Drawing.Point(140, 3);
         	this.title.Name = "title";
         	this.title.Size = new System.Drawing.Size(567, 25);
@@ -216,6 +270,7 @@ namespace TEbyME
         	// 
         	this.minMaxSearch.BackColor = System.Drawing.Color.GhostWhite;
         	this.minMaxSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.minMaxSearch.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.minMaxSearch.Location = new System.Drawing.Point(713, 3);
         	this.minMaxSearch.Name = "minMaxSearch";
         	this.minMaxSearch.Size = new System.Drawing.Size(25, 25);
@@ -227,6 +282,7 @@ namespace TEbyME
         	// 
         	this.closeSearch.BackColor = System.Drawing.Color.GhostWhite;
         	this.closeSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.closeSearch.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.closeSearch.Location = new System.Drawing.Point(744, 3);
         	this.closeSearch.Name = "closeSearch";
         	this.closeSearch.Size = new System.Drawing.Size(25, 25);
@@ -239,6 +295,7 @@ namespace TEbyME
         	this.searchTB.BackColor = System.Drawing.Color.GhostWhite;
         	this.searchTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         	this.searchTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.searchTB.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.searchTB.Location = new System.Drawing.Point(246, 32);
         	this.searchTB.Name = "searchTB";
         	this.searchTB.Size = new System.Drawing.Size(266, 28);
@@ -250,6 +307,7 @@ namespace TEbyME
         	this.replaceTB.BackColor = System.Drawing.Color.GhostWhite;
         	this.replaceTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         	this.replaceTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.replaceTB.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.replaceTB.Location = new System.Drawing.Point(518, 32);
         	this.replaceTB.Name = "replaceTB";
         	this.replaceTB.Size = new System.Drawing.Size(252, 28);
@@ -259,6 +317,7 @@ namespace TEbyME
         	// 
         	this.findBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.findBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.findBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.findBtn.Location = new System.Drawing.Point(140, 68);
         	this.findBtn.Name = "findBtn";
         	this.findBtn.Size = new System.Drawing.Size(75, 35);
@@ -270,6 +329,7 @@ namespace TEbyME
         	// 
         	this.findNextBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.findNextBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.findNextBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.findNextBtn.Location = new System.Drawing.Point(219, 68);
         	this.findNextBtn.Name = "findNextBtn";
         	this.findNextBtn.Size = new System.Drawing.Size(75, 35);
@@ -281,6 +341,7 @@ namespace TEbyME
         	// 
         	this.findPrevBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.findPrevBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.findPrevBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.findPrevBtn.Location = new System.Drawing.Point(300, 68);
         	this.findPrevBtn.Name = "findPrevBtn";
         	this.findPrevBtn.Size = new System.Drawing.Size(105, 35);
@@ -292,6 +353,7 @@ namespace TEbyME
         	// 
         	this.clearBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.clearBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.clearBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.clearBtn.Location = new System.Drawing.Point(424, 68);
         	this.clearBtn.Name = "clearBtn";
         	this.clearBtn.Size = new System.Drawing.Size(75, 35);
@@ -303,6 +365,7 @@ namespace TEbyME
         	// 
         	this.replaceAllBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.replaceAllBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.replaceAllBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.replaceAllBtn.Location = new System.Drawing.Point(630, 68);
         	this.replaceAllBtn.Name = "replaceAllBtn";
         	this.replaceAllBtn.Size = new System.Drawing.Size(139, 35);
@@ -314,6 +377,7 @@ namespace TEbyME
         	// 
         	this.replaceBtn.BackColor = System.Drawing.Color.GhostWhite;
         	this.replaceBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.replaceBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
         	this.replaceBtn.Location = new System.Drawing.Point(518, 68);
         	this.replaceBtn.Name = "replaceBtn";
         	this.replaceBtn.Size = new System.Drawing.Size(109, 35);
@@ -326,9 +390,9 @@ namespace TEbyME
         	this.fileNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
         	this.fileNameLabel.Location = new System.Drawing.Point(4, 2);
         	this.fileNameLabel.Name = "fileNameLabel";
-        	this.fileNameLabel.Size = new System.Drawing.Size(923, 27);
+        	this.fileNameLabel.Size = new System.Drawing.Size(930, 27);
         	this.fileNameLabel.TabIndex = 1;
-        	this.fileNameLabel.Text = "New";
+        	this.fileNameLabel.Text = "New text file";
         	this.fileNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         	// 
         	// textArea
@@ -341,7 +405,7 @@ namespace TEbyME
         	this.textArea.Location = new System.Drawing.Point(4, 34);
         	this.textArea.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
         	this.textArea.Name = "textArea";
-        	this.textArea.Size = new System.Drawing.Size(923, 514);
+        	this.textArea.Size = new System.Drawing.Size(930, 514);
         	this.textArea.TabIndex = 0;
         	this.textArea.Text = "";
         	this.textArea.TextChanged += new System.EventHandler(this.TextAreaTextChanged);
@@ -400,7 +464,7 @@ namespace TEbyME
         	// 
         	this.mainLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
         	this.mainLayoutPanel.ColumnCount = 1;
-        	this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 929F));
+        	this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 936F));
         	this.mainLayoutPanel.Controls.Add(this.fileNameLabel, 0, 1);
         	this.mainLayoutPanel.Controls.Add(this.textArea, 0, 2);
         	this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -412,11 +476,6 @@ namespace TEbyME
         	this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 403F));
         	this.mainLayoutPanel.Size = new System.Drawing.Size(920, 553);
         	this.mainLayoutPanel.TabIndex = 15;
-        	// 
-        	// toolStripSeparator1
-        	// 
-        	this.toolStripSeparator1.Name = "toolStripSeparator1";
-        	this.toolStripSeparator1.Size = new System.Drawing.Size(223, 6);
         	// 
         	// MainForm
         	// 
@@ -448,6 +507,11 @@ namespace TEbyME
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem darkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lightToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem themesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem windowToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pastToolStripMenuItem;

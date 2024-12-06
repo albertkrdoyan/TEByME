@@ -23,6 +23,10 @@ namespace TEbyME
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
 
+        private struct Themes{
+        	public string name;
+        }
+        
         private struct SWindowMove
         {
             public bool is_swindow_mouse_down;
@@ -41,6 +45,7 @@ namespace TEbyME
         private Form searchWindow;
         private SWindowMove swm;
         private SearchIN si;
+        private Themes theme;
 
         public MainForm(string path)
         {
@@ -88,6 +93,8 @@ namespace TEbyME
 
             swm = new MainForm.SWindowMove();
             si = new MainForm.SearchIN();
+            theme = new MainForm.Themes();
+            theme.name = "default";
 
             int hei = 113, wid = 663;
             searchWindow = new Form()
@@ -395,7 +402,7 @@ namespace TEbyME
 
             filepath = "";
             textArea.Text = "";
-            fileNameLabel.Text = "New";
+            fileNameLabel.Text = "New text file";
             text_changed = false;
         }
 
@@ -648,6 +655,82 @@ namespace TEbyME
         void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
         {
         	SaveFile();
+        }
+        
+        void DefaultToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	if (defaultToolStripMenuItem.Checked == true) return;
+        	
+        	if (theme.name == "dark")
+        		darkToolStripMenuItem.Checked = false;
+        	else
+        		lightToolStripMenuItem.Checked = false;
+        	
+        	theme.name = "default";
+        	defaultToolStripMenuItem.Checked = true;
+        	
+        	ChangeTheme();
+        }
+        
+        void LightToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	if (lightToolStripMenuItem.Checked == true) return;
+        	
+        	if (theme.name == "dark")
+        		darkToolStripMenuItem.Checked = false;
+        	else
+        		defaultToolStripMenuItem.Checked = false;
+        	
+        	theme.name = "light";
+        	lightToolStripMenuItem.Checked = true;
+        	
+        	ChangeTheme();
+        }
+        
+        void DarkToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	if (darkToolStripMenuItem.Checked == true) return;
+        	
+        	if (theme.name == "light")
+        		lightToolStripMenuItem.Checked = false;
+        	else
+        		defaultToolStripMenuItem.Checked = false;
+        	
+        	theme.name = "dark";
+        	darkToolStripMenuItem.Checked = true;
+        	
+        	ChangeTheme();
+        }
+        
+        void ChangeTheme(){
+        	if (theme.name == "default"){
+        		this.menuStrip1.BackColor = System.Drawing.Color.LightSlateGray;
+        		this.menuStrip1.ForeColor = System.Drawing.Color.Black;
+        		
+        		this.textArea.BackColor = System.Drawing.Color.FromArgb(22, 22, 22);
+        		this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
+        		
+        		this.BackColor = System.Drawing.Color.SlateGray;
+        		this.ForeColor = Color.Black;
+        	}else if (theme.name == "dark"){
+        		this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(48,31,86);
+        		this.menuStrip1.ForeColor = System.Drawing.Color.White;
+        		
+        		this.textArea.BackColor = System.Drawing.Color.FromArgb(52,50,50);
+        		this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
+        		
+        		this.BackColor = System.Drawing.Color.FromArgb(52,50,50);
+        		this.ForeColor = Color.White;
+        	}else{
+        		this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
+        		this.menuStrip1.ForeColor = System.Drawing.Color.Black;
+        		
+        		this.textArea.BackColor = System.Drawing.SystemColors.ControlDark;
+        		this.textArea.ForeColor = System.Drawing.Color.Black;
+        		
+        		this.BackColor =  System.Drawing.SystemColors.Control;
+        		this.ForeColor = Color.Black;
+        	}
         }
     }
 
