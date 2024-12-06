@@ -23,17 +23,6 @@ namespace TEbyME
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
 
-        struct Command
-        {
-            public string type;
-            public int index, length;
-            public string data;
-        }
-        struct History
-        {   
-            public Stack<Command> undo;
-            public Stack<Command> redo;
-        }
         private struct SWindowMove
         {
             public bool is_swindow_mouse_down;
@@ -132,9 +121,6 @@ namespace TEbyME
             this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
 
             this.clearBtn.MouseClick += ClearBtn_MouseClick;
-            
-//            this.searchWindow.KeyPress += FindToolStripMenuItemClick;
-//            this.searchTB.TextChanged += SearchTB_TextChanged;
         }
 
         private void ClearBtn_MouseClick(object sender, MouseEventArgs e)
@@ -456,32 +442,37 @@ namespace TEbyME
             }
             else
             {
-                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-                {
-                    saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-                    saveFileDialog.FilterIndex = 1;
-
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string filePath = saveFileDialog.FileName;
-                        File.WriteAllText(filePath, textArea.Text);
-                        filepath = filePath;
-
-                        fileNameLabel.Text = "";
-                        int last_slash = -1;
-                        for (int i = 0; i < filepath.Length; ++i)
-                        {
-                            if (filepath[i] == '\\')
-                                last_slash = i;
-                        }
-                        for (int i = last_slash + 1; i < filepath.Length; ++i)
-                            fileNameLabel.Text += filepath[i];
-
-                        new_file = false;
-                        text_changed = false;
-                    }
-                }                
+            	SaveFile();
             }            
+        }
+        
+        private void SaveFile(){
+        	using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.FileName = (fileNameLabel.Text[fileNameLabel.Text.Length - 1] == '*' ? fileNameLabel.Text.Substring(0, fileNameLabel.Text.Length - 1) : fileNameLabel.Text);
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    File.WriteAllText(filePath, textArea.Text);
+                    filepath = filePath;
+
+                    fileNameLabel.Text = "";
+                    int last_slash = -1;
+                    for (int i = 0; i < filepath.Length; ++i)
+                    {
+                        if (filepath[i] == '\\')
+                            last_slash = i;
+                    }
+                    for (int i = last_slash + 1; i < filepath.Length; ++i)
+                        fileNameLabel.Text += filepath[i];
+
+                    new_file = false;
+                    text_changed = false;
+                }
+            }
         }
 
         private void SForm_Load(object sender, EventArgs e)
@@ -634,6 +625,29 @@ namespace TEbyME
             }
 
             return arr;
+        }
+        
+        private void CopyToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	if (textArea.SelectedText.Length == 0) return;
+        	Clipboard.SetText(textArea.SelectedText);
+        }
+        
+        private void CutToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	if (textArea.SelectedText.Length == 0) return;
+        	Clipboard.SetText(textArea.SelectedText);
+        	textArea.SelectedText = "";
+        }
+        
+        private void PastToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	textArea.SelectedText = Clipboard.GetText();
+        }
+        
+        void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+        	SaveFile();
         }
     }
 
