@@ -305,12 +305,7 @@ namespace TEbyME
         
         private void TextAreaKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.V)
-            {
-                string pasttext = Clipboard.GetText();
-                textArea.SelectedText = pasttext;
-                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }
+            // not in use yet
         }
         
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)
@@ -651,7 +646,12 @@ namespace TEbyME
         {
         	textArea.SelectedText = Clipboard.GetText();
         }
-        
+
+        private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Application.ExecutablePath);
+        }
+
         void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
         {
         	SaveFile();

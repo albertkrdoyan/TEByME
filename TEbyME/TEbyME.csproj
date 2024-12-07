@@ -9,7 +9,8 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkProfile />
-    <ApplicationIcon>Resources\2KdpGp-LogoMakr.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -67,6 +68,7 @@
     <Compile Include="Resource1.Designer.cs">
       <DependentUpon>Resource1.resx</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +82,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\new_window1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\new_window2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
