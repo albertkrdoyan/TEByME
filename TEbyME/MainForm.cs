@@ -22,11 +22,13 @@ namespace TEbyME
     {
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
+        int text_len;
 
-        private struct Themes{
-        	public string name;
+        private struct Themes
+        {
+            public string name;
         }
-        
+
         private struct SWindowMove
         {
             public bool is_swindow_mouse_down;
@@ -57,11 +59,11 @@ namespace TEbyME
             //
             // TODO: Add constructor code after the InitializeComponent() call.
             //
-            
+
             PathInit(path);
             OtherInits();
         }
-        
+
         private void PathInit(string path)
         {
             if (path != string.Empty)
@@ -79,16 +81,19 @@ namespace TEbyME
                 }
                 for (int i = last_slash + 1; i < filepath.Length; ++i)
                     fileNameLabel.Text += filepath[i];
+                text_len = textArea.Text.Length;
             }
             else
             {
                 filepath = "";
                 text_changed = false;
+                text_len = 0;
             }
         }
-        
-        private void OtherInits(){
-        	is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
+
+        private void OtherInits()
+        {
+            is_search_replace_window_open = swm.is_swindow_mouse_down = out_of_sw_move_interval = false;
             is_search_popup_window = sw_first_time_load = new_file = true;
 
             swm = new MainForm.SWindowMove();
@@ -153,10 +158,10 @@ namespace TEbyME
 
             string newText = textArea.Text.Substring(0, si.indices.First.Value);
 
-            for (LinkedListNode<int> curr = si.indices.First;  curr != null; curr = curr.Next)
+            for (LinkedListNode<int> curr = si.indices.First; curr != null; curr = curr.Next)
             {
                 newText += replaceTB.Text + textArea.Text.Substring(curr.Value + si.search_text_length,
-                    (curr.Next != null ? curr.Next.Value - curr.Value - si.search_text_length: textArea.TextLength - curr.Value - si.search_text_length));
+                    (curr.Next != null ? curr.Next.Value - curr.Value - si.search_text_length : textArea.TextLength - curr.Value - si.search_text_length));
             }
 
             si = new SearchIN();
@@ -209,12 +214,12 @@ namespace TEbyME
                 MessageBox.Show("No data...", "Search result", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            
+
             if (si.show_next)
             {
                 if ((si.current = si.current.Previous) == null)
                     si.current = si.indices.Last;
-            }                
+            }
             else si.show_next = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
@@ -235,7 +240,7 @@ namespace TEbyME
             {
                 if ((si.current = si.current.Next) == null)
                     si.current = si.indices.First;
-            }                
+            }
             else si.show_next = true;
 
             textArea.Select(si.current.Value, si.search_text_length);
@@ -286,7 +291,7 @@ namespace TEbyME
             swm.mouse_x = Cursor.Position.X;
             swm.mouse_y = Cursor.Position.Y;
         }
-       
+
         private void Sform_mouse_up(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
@@ -302,21 +307,37 @@ namespace TEbyME
                 out_of_sw_move_interval = false;
             }
         }
-        
-        private void TextAreaKeyDown(object sender, KeyEventArgs e)
+
+        private void TextAreaKeyUp(object sender, KeyEventArgs e)
         {
-            // not in use yet
+            if (textArea.Text.Length == text_len) return;
+
+            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(e.KeyValue).ToString() + ", " + e.KeyData.ToString() + "}";
+
+            text_len = textArea.Text.Length;       
         }
-        
+
+        private void TextAreaTextChanged(object sender, EventArgs e)
+        {
+            if (text_changed == false)
+            {
+                text_changed = true;
+                fileNameLabel.Text += "*";
+            }
+            if (new_file) new_file = false;
+        }
+
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) 
+            if (e.KeyCode == Keys.Enter)
             {
                 FindBtn_MouseClick(Keys.Enter, null);
                 e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
-            }else if (e.KeyCode == Keys.Escape && is_search_replace_window_open){
-            	OpenAndCloseSearchAndReplaceWindow();
-            	e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
+            }
+            else if (e.KeyCode == Keys.Escape && is_search_replace_window_open)
+            {
+                OpenAndCloseSearchAndReplaceWindow();
+                e.SuppressKeyPress = true;  // Stops other controls on the form receiving event.
             }
         }
 
@@ -444,12 +465,13 @@ namespace TEbyME
             }
             else
             {
-            	SaveFile();
-            }            
+                SaveFile();
+            }
         }
-        
-        private void SaveFile(){
-        	using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+
+        private void SaveFile()
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
@@ -530,7 +552,7 @@ namespace TEbyME
                     searchWindow.ActiveControl = searchTB;
                 }
             };
-        }        
+        }
 
         private void FindToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -556,28 +578,18 @@ namespace TEbyME
         {
             OpenAndCloseSearchAndReplaceWindow();
         }
-        
-        private void TextAreaTextChanged(object sender, EventArgs e)
-        {
-        	if (text_changed == false)
-            {
-                text_changed = true;
-                fileNameLabel.Text += "*";
-            }
-        	if (new_file) new_file = false;
-        }
-        
+
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
-        	if (new_file || !text_changed) return;
-        	
-        	DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-        	if (res == DialogResult.Yes)
-				SaveToolStripMenuItemClick(null, null);
-        	else if (res == DialogResult.Cancel)
-				e.Cancel = true;
+            if (new_file || !text_changed) return;
+
+            DialogResult res = MessageBox.Show("File has been changed.. Do you want to save it?", "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            if (res == DialogResult.Yes)
+                SaveToolStripMenuItemClick(null, null);
+            else if (res == DialogResult.Cancel)
+                e.Cancel = true;
         }
-        
+
         private LinkedList<int> SearchKMP(string text, string pattern)
         {
             List<int> arr = SetupKMP(ref pattern);
@@ -628,23 +640,23 @@ namespace TEbyME
 
             return arr;
         }
-        
+
         private void CopyToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	if (textArea.SelectedText.Length == 0) return;
-        	Clipboard.SetText(textArea.SelectedText);
+            if (textArea.SelectedText.Length == 0) return;
+            Clipboard.SetText(textArea.SelectedText);
         }
-        
+
         private void CutToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	if (textArea.SelectedText.Length == 0) return;
-        	Clipboard.SetText(textArea.SelectedText);
-        	textArea.SelectedText = "";
+            if (textArea.SelectedText.Length == 0) return;
+            Clipboard.SetText(textArea.SelectedText);
+            textArea.SelectedText = "";
         }
-        
+
         private void PastToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	textArea.SelectedText = Clipboard.GetText();
+            textArea.SelectedText = Clipboard.GetText();
         }
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -654,83 +666,89 @@ namespace TEbyME
 
         void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	SaveFile();
+            SaveFile();
         }
-        
+
         void DefaultToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	if (defaultToolStripMenuItem.Checked == true) return;
-        	
-        	if (theme.name == "dark")
-        		darkToolStripMenuItem.Checked = false;
-        	else
-        		lightToolStripMenuItem.Checked = false;
-        	
-        	theme.name = "default";
-        	defaultToolStripMenuItem.Checked = true;
-        	
-        	ChangeTheme();
+            if (defaultToolStripMenuItem.Checked == true) return;
+
+            if (theme.name == "dark")
+                darkToolStripMenuItem.Checked = false;
+            else
+                lightToolStripMenuItem.Checked = false;
+
+            theme.name = "default";
+            defaultToolStripMenuItem.Checked = true;
+
+            ChangeTheme();
         }
-        
+
         void LightToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	if (lightToolStripMenuItem.Checked == true) return;
-        	
-        	if (theme.name == "dark")
-        		darkToolStripMenuItem.Checked = false;
-        	else
-        		defaultToolStripMenuItem.Checked = false;
-        	
-        	theme.name = "light";
-        	lightToolStripMenuItem.Checked = true;
-        	
-        	ChangeTheme();
+            if (lightToolStripMenuItem.Checked == true) return;
+
+            if (theme.name == "dark")
+                darkToolStripMenuItem.Checked = false;
+            else
+                defaultToolStripMenuItem.Checked = false;
+
+            theme.name = "light";
+            lightToolStripMenuItem.Checked = true;
+
+            ChangeTheme();
         }
-        
+
         void DarkToolStripMenuItemClick(object sender, EventArgs e)
         {
-        	if (darkToolStripMenuItem.Checked == true) return;
-        	
-        	if (theme.name == "light")
-        		lightToolStripMenuItem.Checked = false;
-        	else
-        		defaultToolStripMenuItem.Checked = false;
-        	
-        	theme.name = "dark";
-        	darkToolStripMenuItem.Checked = true;
-        	
-        	ChangeTheme();
+            if (darkToolStripMenuItem.Checked == true) return;
+
+            if (theme.name == "light")
+                lightToolStripMenuItem.Checked = false;
+            else
+                defaultToolStripMenuItem.Checked = false;
+
+            theme.name = "dark";
+            darkToolStripMenuItem.Checked = true;
+
+            ChangeTheme();
         }
-        
-        void ChangeTheme(){
-        	if (theme.name == "default"){
-        		this.menuStrip1.BackColor = System.Drawing.Color.LightSlateGray;
-        		this.menuStrip1.ForeColor = System.Drawing.Color.Black;
-        		
-        		this.textArea.BackColor = System.Drawing.Color.FromArgb(22, 22, 22);
-        		this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
-        		
-        		this.BackColor = System.Drawing.Color.SlateGray;
-        		this.ForeColor = Color.Black;
-        	}else if (theme.name == "dark"){
-        		this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(48,31,86);
-        		this.menuStrip1.ForeColor = System.Drawing.Color.White;
-        		
-        		this.textArea.BackColor = System.Drawing.Color.FromArgb(52,50,50);
-        		this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
-        		
-        		this.BackColor = System.Drawing.Color.FromArgb(52,50,50);
-        		this.ForeColor = Color.White;
-        	}else{
-        		this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
-        		this.menuStrip1.ForeColor = System.Drawing.Color.Black;
-        		
-        		this.textArea.BackColor = System.Drawing.SystemColors.ControlDark;
-        		this.textArea.ForeColor = System.Drawing.Color.Black;
-        		
-        		this.BackColor =  System.Drawing.SystemColors.Control;
-        		this.ForeColor = Color.Black;
-        	}
+
+        void ChangeTheme()
+        {
+            if (theme.name == "default")
+            {
+                this.menuStrip1.BackColor = System.Drawing.Color.LightSlateGray;
+                this.menuStrip1.ForeColor = System.Drawing.Color.Black;
+
+                this.textArea.BackColor = System.Drawing.Color.FromArgb(22, 22, 22);
+                this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
+
+                this.BackColor = System.Drawing.Color.SlateGray;
+                this.ForeColor = Color.Black;
+            }
+            else if (theme.name == "dark")
+            {
+                this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(48, 31, 86);
+                this.menuStrip1.ForeColor = System.Drawing.Color.White;
+
+                this.textArea.BackColor = System.Drawing.Color.FromArgb(52, 50, 50);
+                this.textArea.ForeColor = System.Drawing.Color.AntiqueWhite;
+
+                this.BackColor = System.Drawing.Color.FromArgb(52, 50, 50);
+                this.ForeColor = Color.White;
+            }
+            else
+            {
+                this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
+                this.menuStrip1.ForeColor = System.Drawing.Color.Black;
+
+                this.textArea.BackColor = System.Drawing.SystemColors.ControlDark;
+                this.textArea.ForeColor = System.Drawing.Color.Black;
+
+                this.BackColor = System.Drawing.SystemColors.Control;
+                this.ForeColor = Color.Black;
+            }
         }
     }
 
