@@ -22,7 +22,7 @@ namespace TEbyME
     {
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
-        int text_len;
+        char key = '\0';
 
         private struct Themes
         {
@@ -81,13 +81,11 @@ namespace TEbyME
                 }
                 for (int i = last_slash + 1; i < filepath.Length; ++i)
                     fileNameLabel.Text += filepath[i];
-                text_len = textArea.Text.Length;
             }
             else
             {
                 filepath = "";
                 text_changed = false;
-                text_len = 0;
             }
         }
 
@@ -307,14 +305,10 @@ namespace TEbyME
                 out_of_sw_move_interval = false;
             }
         }
-
-        private void TextAreaKeyUp(object sender, KeyEventArgs e)
+        
+        private void TextAreaKeyDown(object sender, KeyEventArgs e)
         {
-            if (textArea.Text.Length == text_len) return;
-
-            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(e.KeyValue).ToString() + ", " + e.KeyData.ToString() + "}";
-
-            text_len = textArea.Text.Length;       
+            key = (char)e.KeyCode;
         }
 
         private void TextAreaTextChanged(object sender, EventArgs e)
@@ -325,6 +319,8 @@ namespace TEbyME
                 fileNameLabel.Text += "*";
             }
             if (new_file) new_file = false;
+
+            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key).ToString() + " : " + key.ToString() + "}";
         }
 
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)
