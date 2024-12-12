@@ -48,6 +48,20 @@ namespace TEbyME
         private SWindowMove swm;
         private SearchIN si;
         private Themes theme;
+        
+        bool ctrlz, ctrly;
+        int cursor_location_offset;
+        
+        private struct Undo{
+        	public string data;
+        	public int st_index;
+        	
+        	public Undo(string d, int s) {
+        		data = d;
+        		st_index = s;
+        	}
+        }
+        Stack<Undo> undos;
 
         public MainForm(string path)
         {
@@ -98,6 +112,10 @@ namespace TEbyME
             si = new MainForm.SearchIN();
             theme = new MainForm.Themes();
             theme.name = "default";
+            
+            undos = new Stack<Undo>();
+            ctrly = ctrlz = false;
+            cursor_location_offset = 0;
 
             int hei = 113, wid = 663;
             searchWindow = new Form()
@@ -320,14 +338,51 @@ namespace TEbyME
                 text_changed = true;
                 fileNameLabel.Text += "*";
             }
-            if (new_file) new_file = false;
+            if (new_file) new_file = false;        
 
-            if (key_press.KeyChar == (char)Keys.Back)
-                toolStripStatusLabel1.Text = "Back";
-            else if (textArea.TextLength == textArea.SelectionStart)
-	            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key_press.KeyChar).ToString() + " : " + key_press.KeyChar.ToString() + "}";
+            if (ctrlz || ctrly) {
+            	ctrlz = ctrly = false;
+            	return;
+            }
+            
+            if (key_press.KeyChar == (char)Keys.Back){
+            	toolStripStatusLabel1.Text = "Back";
+            }
+            else if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart){
+            	if (undos.Count == 0)
+            		undos.Push(new Undo("", textArea.SelectionStart - 1));
+            	
+            	Undo undo = undos.Peek();
+            	undos.Pop();
+            	undo.data += key_press.KeyChar.ToString();
+            	undos.Push(undo);
+            	
+            	if (key_press.KeyChar == (char)Keys.Space)
+            		undos.Push(new Undo("", textArea.SelectionStart));
+            }else{
+				undos.Push(new Undo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1));
+				cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
+            }
 
-            toolStripStatusLabel1.Text += "text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
+            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key_press.KeyChar).ToString() + " : " + key_press.KeyChar.ToString() + "}";
+            toolStripStatusLabel1.Text += ", text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
+        }
+        
+        void TextAreaKeyDown(object sender, KeyEventArgs e)
+        {
+        	if (e.Control && e.KeyCode == Keys.Z){
+        		if (undos.Count != 0){
+        			ctrlz = true;
+					Undo undo = undos.Peek();
+        			undos.Pop();
+        			
+        			textArea.Text = textArea.Text.Remove(undo.st_index, undo.data.Length);
+        			textArea.SelectionStart = undo.st_index;
+        			
+        			toolStripStatusLabel1.Text = "Ctrl + Z";
+        		}
+        		e.SuppressKeyPress = true;
+        	}
         }
 
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)
