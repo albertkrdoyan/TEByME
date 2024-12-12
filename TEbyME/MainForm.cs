@@ -22,7 +22,7 @@ namespace TEbyME
     {
         private string filepath;
         private bool text_changed, is_search_replace_window_open, is_search_popup_window, sw_first_time_load, out_of_sw_move_interval, new_file;
-        Keys key = Keys.None;
+        KeyPressEventArgs key_press;
 
         private struct Themes
         {
@@ -306,9 +306,11 @@ namespace TEbyME
             }
         }
         
-        private void TextAreaKeyDown(object sender, KeyEventArgs e)
+        private void TextAreaKeyPress(object sender, KeyPressEventArgs e)
         {
-            key = e.KeyData;
+            key_press = e;
+            if (key_press.KeyChar == '\b')
+                TextAreaTextChanged(null, null);
         }
 
         private void TextAreaTextChanged(object sender, EventArgs e)
@@ -320,8 +322,12 @@ namespace TEbyME
             }
             if (new_file) new_file = false;
 
-            if (textArea.TextLength == textArea.SelectionStart)
-	            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key).ToString() + " : " + key.ToString() + "}";
+            if (key_press.KeyChar == (char)Keys.Back)
+                toolStripStatusLabel1.Text = "Back";
+            else if (textArea.TextLength == textArea.SelectionStart)
+	            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key_press.KeyChar).ToString() + " : " + key_press.KeyChar.ToString() + "}";
+
+            toolStripStatusLabel1.Text += "text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
         }
 
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)

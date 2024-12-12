@@ -411,7 +411,7 @@ namespace TEbyME
             this.textArea.TabIndex = 0;
             this.textArea.Text = "";
             this.textArea.TextChanged += new System.EventHandler(this.TextAreaTextChanged);
-            this.textArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextAreaKeyDown);
+            this.textArea.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextAreaKeyPress);
             // 
             // contextMenuStrip1
             // 

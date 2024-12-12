@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|C:\\Users\\alber\\Desktop\\TEbyME v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|c:\\users\\alber\\desktop\\tebyme v1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|c:\\users\\alber\\desktop\\tebyme v1.1\\tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|C:\\Users\\alber\\Desktop\\TEbyME v1.1\\tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
               "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.cs",
               "RelativeToolTip": "TEbyME\\MainForm.cs",
-              "ViewState": "AgIAADABAAAAAAAAAAAqwDYBAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAABABAAAAAAAAAAAWwDwBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T19:58:44.172Z",
               "EditorCaption": ""
@@ -45,7 +45,7 @@
               "RelativeDocumentMoniker": "TEbyME\\MainForm.Designer.cs",
               "ToolTip": "C:\\Users\\alber\\Desktop\\TEbyME v1.1\\TEbyME\\MainForm.Designer.cs",
               "RelativeToolTip": "TEbyME\\MainForm.Designer.cs",
-              "ViewState": "AgIAAJUBAAAAAAAAAAAtwJwBAABbAAAAAAAAAA==",
+              "ViewState": "AgIAAI8BAAAAAAAAAAAtwJ0BAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T19:58:33.527Z",
               "EditorCaption": ""
@@ -56,6 +56,10 @@
           "DockedWidth": 1538,
           "SelectedChildIndex": -1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
