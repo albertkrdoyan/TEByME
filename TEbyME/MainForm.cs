@@ -340,7 +340,7 @@ namespace TEbyME
             }
             if (new_file) new_file = false;        
 
-            if (ctrlz || ctrly) {
+            if (ctrlz || ctrly || key_press == null) {
             	ctrlz = ctrly = false;
             	return;
             }
@@ -357,7 +357,7 @@ namespace TEbyME
             	undo.data += key_press.KeyChar.ToString();
             	undos.Push(undo);
             	
-            	if (key_press.KeyChar == (char)Keys.Space)
+            	if (undos.Peek().data[0] != ' ' && key_press.KeyChar == (char)Keys.Space)
             		undos.Push(new Undo("", textArea.SelectionStart));
             }else{
 				undos.Push(new Undo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1));
@@ -366,11 +366,15 @@ namespace TEbyME
 
             toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key_press.KeyChar).ToString() + " : " + key_press.KeyChar.ToString() + "}";
             toolStripStatusLabel1.Text += ", text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
+            
+            key_press = null;
         }
         
         void TextAreaKeyDown(object sender, KeyEventArgs e)
         {
         	if (e.Control && e.KeyCode == Keys.Z){
+        		while (undos.Count != 0 && undos.Peek().data == "")
+        			undos.Pop();
         		if (undos.Count != 0){
         			ctrlz = true;
 					Undo undo = undos.Peek();
@@ -714,7 +718,13 @@ namespace TEbyME
 
         private void PastToolStripMenuItemClick(object sender, EventArgs e)
         {
-            textArea.SelectedText = Clipboard.GetText();
+        	string s = Clipboard.GetText();
+            
+            undos.Push(new Undo(s, textArea.SelectionStart));
+            
+            textArea.SelectedText = s;
+            
+            undos.Push(new Undo("", textArea.SelectionStart));
         }
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
