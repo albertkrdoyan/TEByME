@@ -327,7 +327,7 @@ namespace TEbyME
         private void TextAreaKeyPress(object sender, KeyPressEventArgs e)
         {
             key_press = e;
-            if (key_press.KeyChar == '\b')
+            if (key_press.KeyChar == '\b' || key_press.KeyChar == (char)Keys.Enter)
                 TextAreaTextChanged(null, null);
         }
 
@@ -357,7 +357,7 @@ namespace TEbyME
             	undo.data += key_press.KeyChar.ToString();
             	undos.Push(undo);
             	
-            	if (undos.Peek().data[0] != ' ' && key_press.KeyChar == (char)Keys.Space)
+            	if ((undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter) || key_press.KeyChar == (char)Keys.Tab)
             		undos.Push(new Undo("", textArea.SelectionStart));
             }else{
 				undos.Push(new Undo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1));
