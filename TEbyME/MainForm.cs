@@ -361,16 +361,13 @@ namespace TEbyME
             }
             else if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
             {
-                if (undos.Count == 0)
+				if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
                     undos.Push(new Undo("", textArea.SelectionStart - 1));
-
+                
                 Undo undo = undos.Peek();
                 undos.Pop();
                 undo.data += key_press.KeyChar.ToString();
                 undos.Push(undo);
-
-                if ((undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter) || key_press.KeyChar == (char)Keys.Tab)
-                    undos.Push(new Undo("", textArea.SelectionStart));
             }
             else
             {
