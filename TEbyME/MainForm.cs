@@ -355,27 +355,33 @@ namespace TEbyME
                 return;
             }
 
-            if (key_press.KeyChar == (char)Keys.Back)
+            if (key_press.KeyChar == (char)Keys.Back || key_press.KeyChar == 0)
             {
-                toolStripStatusLabel1.Text = "Back";
+            	if (key_press.KeyChar == (char)Keys.Back)
+            		toolStripStatusLabel1.Text = "Back";
+            	else if (key_press.KeyChar == 0)
+            		toolStripStatusLabel1.Text = "Del";
             }
-            else if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
-            {
-				if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
-                    undos.Push(new Undo("", textArea.SelectionStart - 1));
-                
-                Undo undo = undos.Peek();
-                undos.Pop();
-                undo.data += key_press.KeyChar.ToString();
-                undos.Push(undo);
+            else{
+            	if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
+	            {
+					if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
+	                    undos.Push(new Undo("", textArea.SelectionStart - 1));
+	                
+	                Undo undo = undos.Peek();
+	                undos.Pop();
+	                undo.data += key_press.KeyChar.ToString();
+	                undos.Push(undo);
+	            }
+	            else
+	            {
+	                undos.Push(new Undo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1));
+	                cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
+	            }
+	            
+	            toolStripStatusLabel1.Text = "{" + Convert.ToInt32((char)key_press.KeyChar).ToString() + " : " + key_press.KeyChar.ToString() + "}";
             }
-            else
-            {
-                undos.Push(new Undo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1));
-                cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
-            }
-
-            toolStripStatusLabel1.Text = "{" + Convert.ToInt32(key_press.KeyChar).ToString() + " : " + ((Keys)key_press.KeyChar).ToString() + "}";
+            
             toolStripStatusLabel1.Text += ", text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
 
             key_press = null;
@@ -403,6 +409,14 @@ namespace TEbyME
                     toolStripStatusLabel1.Text = "Ctrl + Z";
                 }
                 e.SuppressKeyPress = true;
+            }
+            else if(e.KeyCode == Keys.Delete)
+            	key_press = new KeyPressEventArgs('\0');
+            else if (e.Shift && e.KeyCode == Keys.Delete){
+            	e.SuppressKeyPress = true;
+            }else if (e.Shift && e.KeyCode == Keys.Insert){
+            	PastToolStripMenuItemClick(null, null);
+            	e.SuppressKeyPress = true;
             }
         }
 
@@ -742,6 +756,8 @@ namespace TEbyME
             textArea.SelectedText = s;
 
             undos.Push(new Undo("", textArea.SelectionStart));
+            
+            toolStripStatusLabel1.Text = "Past";
         }
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
