@@ -340,8 +340,9 @@ namespace TEbyME
         private void TextAreaKeyPress(object sender, KeyPressEventArgs e)
         {
             key_press = e;
-            if (key_press.KeyChar == (char)Keys.Enter)
-                TextAreaTextChanged(null, null);
+            if (key_press.KeyChar == (char)Keys.Enter){
+            	TextAreaTextChanged(null, null);
+            }
         }
 
         private void TextAreaTextChanged(object sender, EventArgs e)
@@ -452,10 +453,11 @@ namespace TEbyME
                 }
                 e.SuppressKeyPress = true;
             }
-            //else if ()
-            //{
-
-            //}
+            else if (e.Control && e.KeyCode == Keys.Y)
+            {
+            	
+            	e.SuppressKeyPress = true;
+            }
             else if(e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back){
                 key_press = new KeyPressEventArgs((e.KeyCode == Keys.Delete ? '\0' : '\b'));
                 if (e.KeyCode == Keys.Delete && textArea.SelectionStart != textArea.TextLength)
