@@ -494,7 +494,7 @@ namespace TEbyME
             // 
             // DeletingTimer
             // 
-            this.DeletingTimer.Interval = 1000;
+            this.DeletingTimer.Interval = 550;
             this.DeletingTimer.Tick += new System.EventHandler(this.DeletingTimer_Tick);
             // 
             // MainForm
