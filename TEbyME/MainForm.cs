@@ -370,7 +370,7 @@ namespace TEbyME
             if (key_press.KeyChar == (char)Keys.Back || key_press.KeyChar == 0)
             {
                 if (!DeletingTimer.Enabled)
-                    undos.Push(new UndoRedo("", textArea.SelectionStart, 3, ""));
+                    undos.Push(new UndoRedo("", textArea.SelectionStart, 2, ""));
 
                 DeletingTimer.Enabled = false;
 
@@ -378,11 +378,9 @@ namespace TEbyME
                 undos.Pop();
 
                 if (key_press.KeyChar == (char)Keys.Back) // backspace
-                    undos.Push(new UndoRedo(deletion_text + top.data, textArea.SelectionStart, 3, deletion_text + top.replace));
+                    undos.Push(new UndoRedo(deletion_text + top.data, textArea.SelectionStart, 2, "")); //deletion_text + top.replace
                 else // Delete
-                    undos.Push(new UndoRedo(top.data + deletion_text, textArea.SelectionStart, 3, top.replace + deletion_text));
-
-                redos.Clear();
+                    undos.Push(new UndoRedo(top.data + deletion_text, textArea.SelectionStart, 2, "")); //top.replace + deletion_text                
 
                 DeletingTimer.Enabled = true;
             }
@@ -429,11 +427,10 @@ namespace TEbyME
 
                     cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
                 }
-
-                redos.Clear();
-                deletion_text = "";
             }
 
+            redos.Clear();
+            deletion_text = "";
             key_press = null;
         }
 
