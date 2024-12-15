@@ -385,8 +385,7 @@ namespace TEbyME
                     
                     undos.Push(new UndoRedo(top + deletion_text, textArea.SelectionStart, 2, ""));
                 }
-
-                deletion_text = "";
+                
                 DeletingTimer.Enabled = true;
             }
             else
@@ -398,32 +397,40 @@ namespace TEbyME
                     undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
                 }
                 
-                if (deletion_text == "")
-                {
-                    if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
+                if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
+                {                    
+                    if (deletion_text == "")
                     {
                         if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
                             undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
-
-                        UndoRedo undo = undos.Peek();
-                        undos.Pop();
-                        undo.data += key_press.KeyChar.ToString();
-                        undos.Push(undo);
-
-                        if (key_press.KeyChar == (char)Keys.Tab)
-                            undos.Push(new UndoRedo("", textArea.SelectionStart, 1, ""));
                     }
                     else
+                        undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 3, deletion_text)); //        
+
+                    UndoRedo undo = undos.Peek();
+                    undos.Pop();
+                    undo.data += key_press.KeyChar.ToString();
+                    undos.Push(undo);
+
+                    if (key_press.KeyChar == (char)Keys.Tab)
                     {
-                        undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 1, ""));
-                        cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
+                        if (deletion_text == "")
+                            undos.Push(new UndoRedo("", textArea.SelectionStart, 1, ""));
+                        else
+                            undos.Push(new UndoRedo("", textArea.SelectionStart, 3, deletion_text)); //
                     }
                 }
                 else
                 {
-                    // there is selected text... handle it... modifie == "" case also if needed
+                    if (deletion_text == "")
+                        undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 1, ""));
+                    else
+                        undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 3, deletion_text)); //
+                    
+                    cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
                 }
 
+                deletion_text = "";
                 toolStripStatusLabel1.Text = "{" + Convert.ToInt32((char)key_press.KeyChar).ToString() + " : " + (key_press.KeyChar == (char)Keys.Enter ? "Enter" : key_press.KeyChar.ToString()) + "}";
             }
 
