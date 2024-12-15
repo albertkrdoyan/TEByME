@@ -828,6 +828,9 @@ namespace TEbyME
         private void CutToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (textArea.SelectedText.Length == 0) return;
+            
+            undos.Push(new UndoRedo(textArea.SelectedText, textArea.SelectionStart, 2, ""));
+            
             Clipboard.SetText(textArea.SelectedText);
             textArea.SelectedText = "";
         }
