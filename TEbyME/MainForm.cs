@@ -58,9 +58,7 @@ namespace TEbyME
         private SearchIN si;
         private Themes theme;
 
-        int cursor_location_offset;
-        bool ctrlZ, ctrlY;
-
+        /// undo redo section
         private struct UndoRedo
         {
             public string data, replace;
@@ -76,6 +74,11 @@ namespace TEbyME
             }
         }
         Stack<UndoRedo> undos;
+        Stack<UndoRedo> redos;
+
+        int cursor_location_offset;
+        bool ctrlZ, ctrlY;
+        /// end of undo redo section
 
         public MainForm(string path)
         {
@@ -128,6 +131,7 @@ namespace TEbyME
             theme.name = "default";
 
             undos = new Stack<UndoRedo>();
+            redos = new Stack<UndoRedo>();
             cursor_location_offset = 0;
             ctrlZ = ctrlY = false;
 
@@ -345,7 +349,7 @@ namespace TEbyME
 
             key_press = e;
             if (key_press.KeyChar == (char)Keys.Enter)
-                TextAreaTextChanged(null, null);            
+                TextAreaTextChanged(null, null);
         }
 
         private void TextAreaTextChanged(object sender, EventArgs e)
@@ -366,26 +370,20 @@ namespace TEbyME
             if (key_press.KeyChar == (char)Keys.Back || key_press.KeyChar == 0)
             {
                 if (!DeletingTimer.Enabled)
-                    undos.Push(new UndoRedo("", textArea.SelectionStart, 2, ""));
+                    undos.Push(new UndoRedo("", textArea.SelectionStart, 3, ""));
 
                 DeletingTimer.Enabled = false;
 
-                string top = undos.Peek().data;
+                UndoRedo top = undos.Peek();
                 undos.Pop();
 
                 if (key_press.KeyChar == (char)Keys.Back) // backspace
-                {
-                    toolStripStatusLabel1.Text = "Back";
+                    undos.Push(new UndoRedo(deletion_text + top.data, textArea.SelectionStart, 3, deletion_text + top.replace));
+                else // Delete
+                    undos.Push(new UndoRedo(top.data + deletion_text, textArea.SelectionStart, 3, top.replace + deletion_text));
 
-                    undos.Push(new UndoRedo(deletion_text + top, textArea.SelectionStart, 2, ""));
-                }
-                else if (key_press.KeyChar == 0) // Delete
-                {
-                    toolStripStatusLabel1.Text = "Del";
-                    
-                    undos.Push(new UndoRedo(top + deletion_text, textArea.SelectionStart, 2, ""));
-                }
-                
+                redos.Clear();
+
                 DeletingTimer.Enabled = true;
             }
             else
@@ -395,17 +393,19 @@ namespace TEbyME
                 {
                     DeletingTimer.Enabled = false;
                     undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
+                    redos.Clear();
                 }
-                
+
                 if (textArea.TextLength - cursor_location_offset == textArea.SelectionStart)
-                {                    
-                    if (deletion_text == "")
+                {
+                    if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
                     {
-                        if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
+                        if (deletion_text == "")
                             undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
                     }
-                    else
-                        undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 3, deletion_text)); //        
+
+                    if (deletion_text != "")
+                        undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 3, deletion_text));
 
                     UndoRedo undo = undos.Peek();
                     undos.Pop();
@@ -417,7 +417,7 @@ namespace TEbyME
                         if (deletion_text == "")
                             undos.Push(new UndoRedo("", textArea.SelectionStart, 1, ""));
                         else
-                            undos.Push(new UndoRedo("", textArea.SelectionStart, 3, deletion_text)); //
+                            undos.Push(new UndoRedo("", textArea.SelectionStart, 3, deletion_text));
                     }
                 }
                 else
@@ -426,15 +426,13 @@ namespace TEbyME
                         undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 1, ""));
                     else
                         undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 3, deletion_text)); //
-                    
+
                     cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
                 }
 
+                redos.Clear();
                 deletion_text = "";
-                toolStripStatusLabel1.Text = "{" + Convert.ToInt32((char)key_press.KeyChar).ToString() + " : " + (key_press.KeyChar == (char)Keys.Enter ? "Enter" : key_press.KeyChar.ToString()) + "}";
             }
-
-            toolStripStatusLabel1.Text += ", text len: " + textArea.TextLength + ", last index: " + textArea.SelectionStart.ToString();
 
             key_press = null;
         }
@@ -465,7 +463,8 @@ namespace TEbyME
                         textArea.Select(undo.st_index, 0);
                         textArea.SelectedText = undo.data;
                         textArea.Select(undo.st_index, undo.data.Length);
-                    }else if (undo.mode == 3)
+                    }
+                    else if (undo.mode == 3)
                     {
                         textArea.Select(undo.st_index, undo.data.Length);
                         textArea.SelectedText = undo.replace;
@@ -473,15 +472,42 @@ namespace TEbyME
                     }
 
                     textArea.Refresh();
-
-                    toolStripStatusLabel1.Text = "Ctrl + Z";
+                    redos.Push(undo);
                 }
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
+                while (redos.Count != 0 && redos.Peek().data == "")
+                    redos.Pop();
+                if (redos.Count != 0)
+                {
+                    ctrlY = true;
 
-                ctrlY = true;
+                    UndoRedo redo = redos.Peek();
+                    redos.Pop();
+
+                    if (redo.mode == 1)
+                    {
+                        textArea.Select(redo.st_index, 0);
+                        textArea.SelectedText = redo.data;
+                        textArea.Select(redo.st_index, redo.data.Length);
+                    }
+                    else if (redo.mode == 2)
+                    {
+                        textArea.Select(redo.st_index, redo.data.Length);
+                        textArea.SelectedText = "";
+                    }
+                    else if (redo.mode == 3)
+                    {
+                        textArea.Select(redo.st_index, redo.replace.Length);
+                        textArea.SelectedText = redo.data;
+                        textArea.Select(redo.st_index, redo.data.Length);
+                    }
+
+                    textArea.Refresh();
+                    undos.Push(redo);
+                }
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
@@ -506,9 +532,14 @@ namespace TEbyME
                 PastToolStripMenuItemClick(null, null);
                 e.SuppressKeyPress = true;
             }
-            else if (e.KeyCode == Keys.Insert) {
+            else if (e.KeyCode == Keys.Insert)
+            {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                deletion_text = textArea.SelectedText;
             }
         }
 
@@ -835,9 +866,10 @@ namespace TEbyME
         private void CutToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (textArea.SelectedText.Length == 0) return;
-            
+
             undos.Push(new UndoRedo(textArea.SelectedText, textArea.SelectionStart, 2, ""));
-            
+            redos.Clear();
+
             Clipboard.SetText(textArea.SelectedText);
             textArea.SelectedText = "";
         }
@@ -847,25 +879,24 @@ namespace TEbyME
             string s = Clipboard.GetText();
 
             if (DeletingTimer.Enabled == true)
-                DeletingTimer_Tick(null, null);            
+                DeletingTimer_Tick(null, null);
 
             if (textArea.SelectionLength != 0)
                 undos.Push(new UndoRedo(s, textArea.SelectionStart, 3, textArea.SelectedText));
             else
-                undos.Push(new UndoRedo(s, textArea.SelectionStart, 1, ""));            
+                undos.Push(new UndoRedo(s, textArea.SelectionStart, 1, ""));
 
             textArea.SelectedText = s;
 
             undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
-
-            toolStripStatusLabel1.Text = "Past";
+            redos.Clear();
         }
 
         private void DeletingTimer_Tick(object sender, EventArgs e)
         {
             DeletingTimer.Enabled = false;
-            toolStripStatusLabel1.Text += " DELETING...";
             undos.Push(new UndoRedo("", textArea.SelectionStart, 1, ""));
+            redos.Clear();
         }
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -972,5 +1003,3 @@ namespace TEbyME
         }
     }
 }
-//Несоответствие между архитектурой процессора проекта "MSIL", построение которого выполняется, и архитектурой процессора ссылки "C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll", "x86". Это несоответствие может привести к ошибкам во время выполнения. Попробуйте изменить целевую архитектуру процессора для проекта с помощью диспетчера конфигураций, чтобы согласовать архитектуры процессоров для проекта и ссылок, или используйте зависимость от ссылок с архитектурой процессора, соответствующей целевой архитектуре процессора проекта. (MSB3270)
-//Несоответствие между архитектурой процессора проекта "MSIL", построение которого выполняется, и архитектурой процессора ссылки "System.Data", "AMD64". Это несоответствие может привести к ошибкам во время выполнения. Попробуйте изменить целевую архитектуру процессора для проекта с помощью диспетчера конфигураций, чтобы согласовать архитектуры процессоров для проекта и ссылок, или используйте зависимость от ссылок с архитектурой процессора, соответствующей целевой архитектуре процессора проекта. (MSB3270)
