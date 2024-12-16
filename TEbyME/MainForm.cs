@@ -638,9 +638,9 @@ namespace TEbyME
         {
             if (!is_search_popup_window && is_search_replace_window_open)
             {
-                if (WindowState == FormWindowState.Minimized)
+                if (WindowState == FormWindowState.Minimized && searchWindow.Visible)
                     searchWindow.Hide();
-                else
+                else if (WindowState != FormWindowState.Minimized && !searchWindow.Visible)
                     searchWindow.Show(this);
             }
         }
