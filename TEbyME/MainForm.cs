@@ -65,7 +65,7 @@ namespace TEbyME
             public int st_index;
             public int mode;
 
-            public UndoRedo(string d, int s, int m, string r) /// m // 1 adding, 2 reading, 3 both
+            public UndoRedo(string d, int s, int m, string r) /// m // 1 adding, 2 reading, 3 both, 4 replace all
             {
                 replace = r;
                 data = d;
@@ -190,36 +190,34 @@ namespace TEbyME
             if (si.current == null)
                 return;
 
-            string newText = textArea.Text.Substring(0, si.indices.First.Value);
-
-            for (LinkedListNode<int> curr = si.indices.First; curr != null; curr = curr.Next)
+            for (LinkedListNode<int> curr = si.indices.Last; curr != null; curr = curr.Previous)
             {
-                newText += replaceTB.Text + textArea.Text.Substring(curr.Value + si.search_text_length,
-                    (curr.Next != null ? curr.Next.Value - curr.Value - si.search_text_length : textArea.TextLength - curr.Value - si.search_text_length));
+            	textArea.Select(curr.Value, si.search_text_length);
+            	undos.Push(new UndoRedo(replaceTB.Text, curr.Value, 4, textArea.SelectedText));
+            	textArea.SelectedText = replaceTB.Text;
             }
 
             si = new SearchIN();
-
-            textArea.Text = newText;
         }
 
         private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left || replaceTB.TextLength == 0) return;
-
+            
             if (si.current == null)
                 FindBtn_MouseClick(Keys.Enter, null);
 
-            if (si.current == null)
+            if (si.current == null || si.indices.Count == 0)
                 return;
 
             int offset = replaceTB.TextLength - si.search_text_length;
             si.show_next = false;
 
-            textArea.Text = textArea.Text.Substring(0, si.current.Value)
-                + replaceTB.Text
-                + textArea.Text.Substring(si.current.Value + si.search_text_length, textArea.TextLength - si.current.Value - si.search_text_length);
-
+            textArea.Select(si.current.Value, si.search_text_length);
+            
+            undos.Push(new UndoRedo(replaceTB.Text, si.current.Value, 3, textArea.SelectedText));
+            
+            textArea.SelectedText = replaceTB.Text;
             textArea.Select(si.current.Value, replaceTB.TextLength);
             textArea.Focus();
 
@@ -467,9 +465,24 @@ namespace TEbyME
                         textArea.SelectedText = undo.replace;
                         textArea.Select(undo.st_index, undo.replace.Length);
                     }
+                    while (undo.mode == 4){
+                    	textArea.Select(undo.st_index, undo.data.Length);
+                        textArea.SelectedText = undo.replace;
+                        textArea.Select(undo.st_index, undo.replace.Length);
+                        redos.Push(undo);
+                        
+                        if (undos.Count != 0 && undos.Peek().mode == 4){
+                        	undo = undos.Peek();
+                        	undos.Pop();
+                        }else
+                        	undo.mode = 0;
+                    }
 
                     textArea.Refresh();
-                    redos.Push(undo);
+                    if (undo.mode != 0)
+                    	redos.Push(undo);
+                    else
+                    	textArea.DeselectAll();
                 }
                 e.SuppressKeyPress = true;
             }
@@ -501,9 +514,24 @@ namespace TEbyME
                         textArea.SelectedText = redo.data;
                         textArea.Select(redo.st_index, redo.data.Length);
                     }
+                    while (redo.mode == 4){
+                    	textArea.Select(redo.st_index, redo.replace.Length);
+                        textArea.SelectedText = redo.data;
+                        textArea.Select(redo.st_index, redo.data.Length);
+                        undos.Push(redo);
+                        
+                        if (redos.Count != 0 && redos.Peek().mode == 4){
+                        	redo = redos.Peek();
+                        	redos.Pop();
+                        }else
+                        	redo.mode = 0;
+                    }
 
                     textArea.Refresh();
-                    undos.Push(redo);
+                    if (redo.mode != 0)
+                    	undos.Push(redo);
+                    else
+                    	textArea.DeselectAll();
                 }
                 e.SuppressKeyPress = true;
             }
