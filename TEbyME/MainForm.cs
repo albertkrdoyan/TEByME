@@ -95,6 +95,18 @@ namespace TEbyME
             OtherInits();
         }
 
+        private void Reset()
+        {   
+            undos = new Stack<UndoRedo>();
+            redos = new Stack<UndoRedo>();
+            cursor_location_offset = 0;
+            ctrlZ = ctrlY = false;
+
+            findPrevBtn.Enabled = findNextBtn.Enabled = false;
+            replaceTB.Text = searchTB.Text = "";
+            si = new MainForm.SearchIN();
+        }
+
         private void PathInit(string path)
         {
             if (path != string.Empty)
@@ -661,6 +673,7 @@ namespace TEbyME
             textArea.Text = "";
             fileNameLabel.Text = "New text file";
             text_changed = false;
+            Reset();
         }
 
         private void OpenToolStripMenuItemClick(object sender, EventArgs e)
@@ -688,6 +701,7 @@ namespace TEbyME
                     filepath = openFileDialog.FileName;
                     text_changed = false;
                     new_file = false;
+                    Reset();
                 }
             }
         }
@@ -910,6 +924,8 @@ namespace TEbyME
                 undos.Push(new UndoRedo(s, textArea.SelectionStart, 3, textArea.SelectedText));
             else
                 undos.Push(new UndoRedo(s, textArea.SelectionStart, 1, ""));
+
+            key_press = null;
 
             textArea.SelectedText = s;
 
