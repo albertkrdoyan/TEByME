@@ -80,6 +80,7 @@ namespace TEbyME
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.fileNameLabel = new TEbyME.NoCopyLabel();
             this.DeletingTimer = new System.Windows.Forms.Timer(this.components);
+            this.counterLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.searchPanel.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -96,7 +97,7 @@ namespace TEbyME
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 16);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 20);
             // 
             // fileToolStripMenuItem
             // 
@@ -408,7 +409,7 @@ namespace TEbyME
             this.textArea.Location = new System.Drawing.Point(4, 34);
             this.textArea.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textArea.Name = "textArea";
-            this.textArea.Size = new System.Drawing.Size(946, 509);
+            this.textArea.Size = new System.Drawing.Size(946, 505);
             this.textArea.TabIndex = 0;
             this.textArea.Text = "";
             this.textArea.TextChanged += new System.EventHandler(this.TextAreaTextChanged);
@@ -456,12 +457,13 @@ namespace TEbyME
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 581);
+            this.toolStripStatusLabel1,
+            this.counterLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 577);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(953, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(953, 26);
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -479,7 +481,7 @@ namespace TEbyME
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 403F));
-            this.mainLayoutPanel.Size = new System.Drawing.Size(953, 548);
+            this.mainLayoutPanel.Size = new System.Drawing.Size(953, 544);
             this.mainLayoutPanel.TabIndex = 15;
             // 
             // fileNameLabel
@@ -496,6 +498,12 @@ namespace TEbyME
             // 
             this.DeletingTimer.Interval = 550;
             this.DeletingTimer.Tick += new System.EventHandler(this.DeletingTimer_Tick);
+            // 
+            // counterLabel
+            // 
+            this.counterLabel.Name = "counterLabel";
+            this.counterLabel.Size = new System.Drawing.Size(85, 20);
+            this.counterLabel.Text = "Characters: ";
             // 
             // MainForm
             // 
@@ -565,5 +573,6 @@ namespace TEbyME
         private CheckBox lorwecaseCHB;
         private ToolStripMenuItem newWindowToolStripMenuItem;
         private Timer DeletingTimer;
+        private ToolStripStatusLabel counterLabel;
     }
 }

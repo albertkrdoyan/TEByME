@@ -80,6 +80,8 @@ namespace TEbyME
         bool ctrlZ, ctrlY, ctrlX;
         /// end of undo redo section
 
+        private Counters counter;
+
         public MainForm(string path)
         {
             //
@@ -179,6 +181,11 @@ namespace TEbyME
             this.replaceAllBtn.MouseClick += ReplaceAllBtn_MouseClick;
 
             this.clearBtn.MouseClick += ClearBtn_MouseClick;
+
+            counter = new Counters(" ,./;[]\\!@#$%^&*()_+-=<>?:\"{}|`~\r\n\t", "\r\n");
+
+            counter.CountBFC(textArea.Text);
+            counterLabel.Text = counter.GetInfo();
         }
 
         private void ClearBtn_MouseClick(object sender, MouseEventArgs e)
@@ -375,6 +382,9 @@ namespace TEbyME
                 UndoRedoStateUpdate();
             else
                 ctrlZ = ctrlY = false;
+
+            counter.CountBFC(textArea.Text);
+            counterLabel.Text = counter.GetInfo();
         }
         private void UndoRedoStateUpdate()
         {
@@ -447,7 +457,7 @@ namespace TEbyME
         void TextAreaKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.Z)
-            {                
+            {
                 CtrlZAction();
                 e.SuppressKeyPress = true;
             }
@@ -1062,6 +1072,79 @@ namespace TEbyME
         {
             get { return text; }
             set { if (value == null) value = text; if (text != value) { text = value; Refresh(); OnTextChanged(EventArgs.Empty); } }
+        }
+    }
+
+    public class Counters
+    {
+        private int word_count, line_count, char_count;
+        readonly private List<char> splits;
+        readonly private List<char> special_splits;
+
+        public Counters(string splits, string special_splits)
+        {
+            this.splits = new List<char>();
+            this.special_splits = new List<char>();
+
+            for (int i = 0; i < splits.Length; i++)
+                this.splits.Add(splits[i]);
+
+            for (int i = 0; i < special_splits.Length; i++)
+                this.special_splits.Add(special_splits[i]);
+        }
+
+        public void CountBFC(string s)
+        {
+            bool add_to_chars = true;
+            bool can_make_new_word = true;
+            bool add_to_last_word = true;
+
+            line_count = 1;
+            char_count = 0;
+            word_count = 0;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                for (int j = 0; j < special_splits.Count; j++)
+                {
+                    if (s[i] == special_splits[j])
+                    {
+                        add_to_chars = false;
+                        break;
+                    }
+                }
+                if (add_to_chars)
+                    char_count++;
+                add_to_chars = true;
+
+                if (s[i] == '\n')
+                    line_count++;
+
+                for (int j = 0; j < splits.Count; j++)
+                {
+                    if (s[i] == splits[j])
+                    {
+                        can_make_new_word = true;
+                        add_to_last_word = false;
+                        break;
+                    }
+                    else
+                    {
+                        add_to_last_word = true;
+                    }
+                }
+
+                if (can_make_new_word && add_to_last_word)
+                {
+                    word_count++;
+                    can_make_new_word = false;
+                }
+            }
+        }
+
+        internal string GetInfo()
+        {
+            return "Characters: " + char_count + " | Words: " + word_count + " | Lines: " + line_count;
         }
     }
 }
