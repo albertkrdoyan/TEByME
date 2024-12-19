@@ -371,12 +371,13 @@ namespace TEbyME
             }
             if (new_file) new_file = false;
 
-            if (ctrlZ || ctrlY || key_press == null)
-            {
+            if (!ctrlZ && !ctrlY && key_press != null)
+                UndoRedoStateUpdate();
+            else
                 ctrlZ = ctrlY = false;
-                return;
-            }
-
+        }
+        private void UndoRedoStateUpdate()
+        {
             if (key_press.KeyChar == (char)Keys.Back || key_press.KeyChar == 0)
             {
                 if (!DeletingTimer.Enabled)
@@ -413,7 +414,7 @@ namespace TEbyME
                     }
 
                     if (deletion_text != "")
-                        undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 3, deletion_text));
+                        undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart), 3, deletion_text));
 
                     UndoRedo undo = undos.Peek();
                     undos.Pop();
@@ -443,118 +444,16 @@ namespace TEbyME
             deletion_text = "";
             key_press = null;
         }
-
         void TextAreaKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.Z)
-            {
-                while (undos.Count != 0 && undos.Peek().data == "" && undos.Peek().replace == "")
-                    undos.Pop(); // world here for better result
-                if (undos.Count != 0)
-                {
-                    ctrlZ = true;
-
-                    UndoRedo undo = undos.Peek();
-                    undos.Pop();
-
-                    if (undo.mode == 1)
-                    {
-                        SendMessage(textArea.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-                        textArea.Select(undo.st_index, undo.data.Length);
-                        textArea.SelectedText = "";
-                        textArea.DeselectAll();
-                        SendMessage(textArea.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero); // turnes off selection blue area animation                                                
-                    }
-                    else if (undo.mode == 2)
-                    {
-                        textArea.Select(undo.st_index, 0);
-                        textArea.SelectedText = undo.data;
-                        textArea.Select(undo.st_index, undo.data.Length);
-                        textArea.SelectionStart = undo.st_index + undo.data.Length;
-                    }
-                    else if (undo.mode == 3)
-                    {
-                        textArea.Select(undo.st_index, undo.data.Length);
-                        textArea.SelectedText = undo.replace;
-                        textArea.Select(undo.st_index, undo.replace.Length);
-                        textArea.SelectionStart = undo.st_index + undo.replace.Length;
-                    }
-                    while (undo.mode == 4)
-                    {
-                        textArea.Select(undo.st_index, undo.data.Length);
-                        textArea.SelectedText = undo.replace;
-                        textArea.Select(undo.st_index, undo.replace.Length);
-                        redos.Push(undo);
-
-                        if (undos.Count != 0 && undos.Peek().mode == 4)
-                        {
-                            undo = undos.Peek();
-                            undos.Pop();
-                        }
-                        else
-                            undo.mode = 0;
-                    }
-
-                    textArea.Refresh();
-                    if (undo.mode != 0)
-                        redos.Push(undo);
-                    else
-                        textArea.DeselectAll();
-                }
+            {                
+                CtrlZAction();
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
-                while (redos.Count != 0 && redos.Peek().data == "" && redos.Peek().replace == "")
-                    redos.Pop(); // world here for better result
-                if (redos.Count != 0)
-                {
-                    ctrlY = true;
-
-                    UndoRedo redo = redos.Peek();
-                    redos.Pop();
-
-                    if (redo.mode == 1)
-                    {
-                        textArea.Select(redo.st_index, 0);
-                        textArea.SelectedText = redo.data;
-                        textArea.Select(redo.st_index, redo.data.Length);
-                        textArea.SelectionStart = redo.st_index + redo.data.Length;
-                    }
-                    else if (redo.mode == 2)
-                    {
-                        textArea.Select(redo.st_index, redo.data.Length);
-                        textArea.SelectedText = "";
-                    }
-                    else if (redo.mode == 3)
-                    {
-                        textArea.Select(redo.st_index, redo.replace.Length);
-                        textArea.SelectedText = redo.data;
-                        textArea.Select(redo.st_index, redo.data.Length);
-                        textArea.SelectionStart = redo.st_index + redo.data.Length;
-                    }
-                    while (redo.mode == 4)
-                    {
-                        textArea.Select(redo.st_index, redo.replace.Length);
-                        textArea.SelectedText = redo.data;
-                        textArea.Select(redo.st_index, redo.data.Length);
-                        undos.Push(redo);
-
-                        if (redos.Count != 0 && redos.Peek().mode == 4)
-                        {
-                            redo = redos.Peek();
-                            redos.Pop();
-                        }
-                        else
-                            redo.mode = 0;
-                    }
-
-                    textArea.Refresh();
-                    if (redo.mode != 0)
-                        undos.Push(redo);
-                    else
-                        textArea.DeselectAll();
-                }
+                CtrlYAction();
                 e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
@@ -590,6 +489,116 @@ namespace TEbyME
             }
         }
 
+        private void CtrlZAction()
+        {
+            while (undos.Count != 0 && undos.Peek().data == "" && undos.Peek().replace == "")
+                undos.Pop(); // world here for better result
+            if (undos.Count != 0)
+            {
+                ctrlZ = true;
+
+                UndoRedo undo = undos.Peek();
+                undos.Pop();
+
+                if (undo.mode == 1)
+                {
+                    SendMessage(textArea.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+                    textArea.Select(undo.st_index, undo.data.Length);
+                    textArea.SelectedText = "";
+                    textArea.DeselectAll();
+                    SendMessage(textArea.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero); // turnes off selection blue area animation                                                
+                }
+                else if (undo.mode == 2)
+                {
+                    textArea.Select(undo.st_index, 0);
+                    textArea.SelectedText = undo.data;
+                    textArea.Select(undo.st_index, undo.data.Length);
+                    textArea.SelectionStart = undo.st_index + undo.data.Length;
+                }
+                else if (undo.mode == 3)
+                {
+                    textArea.Select(undo.st_index, undo.data.Length);
+                    textArea.SelectedText = undo.replace;
+                    textArea.Select(undo.st_index, undo.replace.Length);
+                    textArea.SelectionStart = undo.st_index + undo.replace.Length;
+                }
+                while (undo.mode == 4)
+                {
+                    textArea.Select(undo.st_index, undo.data.Length);
+                    textArea.SelectedText = undo.replace;
+                    textArea.Select(undo.st_index, undo.replace.Length);
+                    redos.Push(undo);
+
+                    if (undos.Count != 0 && undos.Peek().mode == 4)
+                    {
+                        undo = undos.Peek();
+                        undos.Pop();
+                    }
+                    else
+                        undo.mode = 0;
+                }
+
+                textArea.Refresh();
+                if (undo.mode != 0)
+                    redos.Push(undo);
+                else
+                    textArea.DeselectAll();
+            }
+        }
+
+        private void CtrlYAction()
+        {
+            while (redos.Count != 0 && redos.Peek().data == "" && redos.Peek().replace == "")
+                redos.Pop(); // world here for better result
+            if (redos.Count != 0)
+            {
+                ctrlY = true;
+
+                UndoRedo redo = redos.Peek();
+                redos.Pop();
+
+                if (redo.mode == 1)
+                {
+                    textArea.Select(redo.st_index, 0);
+                    textArea.SelectedText = redo.data;
+                    textArea.Select(redo.st_index, redo.data.Length);
+                    textArea.SelectionStart = redo.st_index + redo.data.Length;
+                }
+                else if (redo.mode == 2)
+                {
+                    textArea.Select(redo.st_index, redo.data.Length);
+                    textArea.SelectedText = "";
+                }
+                else if (redo.mode == 3)
+                {
+                    textArea.Select(redo.st_index, redo.replace.Length);
+                    textArea.SelectedText = redo.data;
+                    textArea.Select(redo.st_index, redo.data.Length);
+                    textArea.SelectionStart = redo.st_index + redo.data.Length;
+                }
+                while (redo.mode == 4)
+                {
+                    textArea.Select(redo.st_index, redo.replace.Length);
+                    textArea.SelectedText = redo.data;
+                    textArea.Select(redo.st_index, redo.data.Length);
+                    undos.Push(redo);
+
+                    if (redos.Count != 0 && redos.Peek().mode == 4)
+                    {
+                        redo = redos.Peek();
+                        redos.Pop();
+                    }
+                    else
+                        redo.mode = 0;
+                }
+
+                textArea.Refresh();
+                if (redo.mode != 0)
+                    undos.Push(redo);
+                else
+                    textArea.DeselectAll();
+            }
+        }
         private void SearchTB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

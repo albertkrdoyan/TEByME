@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|c:\\users\\alber\\desktop\\tebyme v2.1.1\\tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BD419A99-4D76-43F2-B376-C458E0C08841}|TEbyME\\TEbyME.csproj|solutionrelative:tebyme\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -30,8 +30,8 @@
               "Title": "MainForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs [Design]*",
-              "RelativeToolTip": "TEbyME\\MainForm.cs [Design]*",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs [Design]",
+              "RelativeToolTip": "TEbyME\\MainForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-13T18:50:00.121Z",
               "EditorCaption": " [Design]"
@@ -42,9 +42,9 @@
               "Title": "MainForm.cs",
               "DocumentMoniker": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs",
               "RelativeDocumentMoniker": "TEbyME\\MainForm.cs",
-              "ToolTip": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs*",
-              "RelativeToolTip": "TEbyME\\MainForm.cs*",
-              "ViewState": "AgIAAKEBAAAAAAAAAAAAwCEEAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\alber\\Desktop\\TEByME V2.1.1\\TEbyME\\MainForm.cs",
+              "RelativeToolTip": "TEbyME\\MainForm.cs",
+              "ViewState": "AgIAAGgBAAAAAAAAAAAswHgBAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T19:58:44.172Z",
               "EditorCaption": ""
