@@ -71,6 +71,8 @@ namespace TEbyME
                 data = d;
                 st_index = s;
                 mode = m;
+                if (s == -1)
+            		return;
             }
         }
         Stack<UndoRedo> undos;
@@ -910,6 +912,8 @@ namespace TEbyME
             redos.Clear();
 
             Clipboard.SetText(textArea.SelectedText);
+            
+            key_press = null;
             textArea.SelectedText = "";
         }
 
