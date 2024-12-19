@@ -96,7 +96,7 @@ namespace TEbyME
         }
 
         private void Reset()
-        {   
+        {
             undos = new Stack<UndoRedo>();
             redos = new Stack<UndoRedo>();
             cursor_location_offset = 0;
@@ -204,9 +204,9 @@ namespace TEbyME
 
             for (LinkedListNode<int> curr = si.indices.Last; curr != null; curr = curr.Previous)
             {
-            	textArea.Select(curr.Value, si.search_text_length);
-            	undos.Push(new UndoRedo(replaceTB.Text, curr.Value, 4, textArea.SelectedText));
-            	textArea.SelectedText = replaceTB.Text;
+                textArea.Select(curr.Value, si.search_text_length);
+                undos.Push(new UndoRedo(replaceTB.Text, curr.Value, 4, textArea.SelectedText));
+                textArea.SelectedText = replaceTB.Text;
             }
 
             si = new SearchIN();
@@ -215,7 +215,7 @@ namespace TEbyME
         private void ReplaceBtn_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left || replaceTB.TextLength == 0) return;
-            
+
             if (si.current == null)
                 FindBtn_MouseClick(Keys.Enter, null);
 
@@ -226,9 +226,9 @@ namespace TEbyME
             si.show_next = false;
 
             textArea.Select(si.current.Value, si.search_text_length);
-            
+
             undos.Push(new UndoRedo(replaceTB.Text, si.current.Value, 3, textArea.SelectedText));
-            
+
             textArea.SelectedText = replaceTB.Text;
             textArea.Select(si.current.Value, replaceTB.TextLength);
             textArea.Focus();
@@ -413,14 +413,14 @@ namespace TEbyME
                     }
 
                     if (deletion_text != "")
-                    	undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 3, deletion_text));
-                    
+                        undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 3, deletion_text));
+
                     UndoRedo undo = undos.Peek();
                     undos.Pop();
                     undo.data += (ctrlX ? "" : key_press.KeyChar.ToString());
                     undos.Push(undo);
 
-                    if (key_press.KeyChar == (char)Keys.Tab)
+                    if (key_press.KeyChar == (char)Keys.Tab || key_press.KeyChar == (char)Keys.Enter)
                     {
                         if (deletion_text == "")
                             undos.Push(new UndoRedo("", textArea.SelectionStart, 1, ""));
@@ -463,44 +463,49 @@ namespace TEbyME
                         textArea.Select(undo.st_index, undo.data.Length);
                         textArea.SelectedText = "";
                         textArea.DeselectAll();
-                        SendMessage(textArea.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero); // turnes off selection blue area animation                        
+                        SendMessage(textArea.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero); // turnes off selection blue area animation                                                
                     }
                     else if (undo.mode == 2)
                     {
                         textArea.Select(undo.st_index, 0);
                         textArea.SelectedText = undo.data;
                         textArea.Select(undo.st_index, undo.data.Length);
+                        textArea.SelectionStart = undo.st_index + undo.data.Length;
                     }
                     else if (undo.mode == 3)
                     {
                         textArea.Select(undo.st_index, undo.data.Length);
                         textArea.SelectedText = undo.replace;
                         textArea.Select(undo.st_index, undo.replace.Length);
+                        textArea.SelectionStart = undo.st_index + undo.replace.Length;
                     }
-                    while (undo.mode == 4){
-                    	textArea.Select(undo.st_index, undo.data.Length);
+                    while (undo.mode == 4)
+                    {
+                        textArea.Select(undo.st_index, undo.data.Length);
                         textArea.SelectedText = undo.replace;
                         textArea.Select(undo.st_index, undo.replace.Length);
                         redos.Push(undo);
-                        
-                        if (undos.Count != 0 && undos.Peek().mode == 4){
-                        	undo = undos.Peek();
-                        	undos.Pop();
-                        }else
-                        	undo.mode = 0;
+
+                        if (undos.Count != 0 && undos.Peek().mode == 4)
+                        {
+                            undo = undos.Peek();
+                            undos.Pop();
+                        }
+                        else
+                            undo.mode = 0;
                     }
 
                     textArea.Refresh();
                     if (undo.mode != 0)
-                    	redos.Push(undo);
+                        redos.Push(undo);
                     else
-                    	textArea.DeselectAll();
+                        textArea.DeselectAll();
                 }
                 e.SuppressKeyPress = true;
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
-            	while (redos.Count != 0 && redos.Peek().data == "" && redos.Peek().replace == "")
+                while (redos.Count != 0 && redos.Peek().data == "" && redos.Peek().replace == "")
                     redos.Pop(); // world here for better result
                 if (redos.Count != 0)
                 {
@@ -514,6 +519,7 @@ namespace TEbyME
                         textArea.Select(redo.st_index, 0);
                         textArea.SelectedText = redo.data;
                         textArea.Select(redo.st_index, redo.data.Length);
+                        textArea.SelectionStart = redo.st_index + redo.data.Length;
                     }
                     else if (redo.mode == 2)
                     {
@@ -525,25 +531,29 @@ namespace TEbyME
                         textArea.Select(redo.st_index, redo.replace.Length);
                         textArea.SelectedText = redo.data;
                         textArea.Select(redo.st_index, redo.data.Length);
+                        textArea.SelectionStart = redo.st_index + redo.data.Length;
                     }
-                    while (redo.mode == 4){
-                    	textArea.Select(redo.st_index, redo.replace.Length);
+                    while (redo.mode == 4)
+                    {
+                        textArea.Select(redo.st_index, redo.replace.Length);
                         textArea.SelectedText = redo.data;
                         textArea.Select(redo.st_index, redo.data.Length);
                         undos.Push(redo);
-                        
-                        if (redos.Count != 0 && redos.Peek().mode == 4){
-                        	redo = redos.Peek();
-                        	redos.Pop();
-                        }else
-                        	redo.mode = 0;
+
+                        if (redos.Count != 0 && redos.Peek().mode == 4)
+                        {
+                            redo = redos.Peek();
+                            redos.Pop();
+                        }
+                        else
+                            redo.mode = 0;
                     }
 
                     textArea.Refresh();
                     if (redo.mode != 0)
-                    	undos.Push(redo);
+                        undos.Push(redo);
                     else
-                    	textArea.DeselectAll();
+                        textArea.DeselectAll();
                 }
                 e.SuppressKeyPress = true;
             }
@@ -909,8 +919,8 @@ namespace TEbyME
             Clipboard.SetText(textArea.SelectedText);
             deletion_text = textArea.SelectedText;
 
-			ctrlX = true;
-			key_press = new KeyPressEventArgs((char)Keys.A);
+            ctrlX = true;
+            key_press = new KeyPressEventArgs((char)Keys.A);
             textArea.SelectedText = "";
             ctrlX = false;
         }
