@@ -71,15 +71,13 @@ namespace TEbyME
                 data = d;
                 st_index = s;
                 mode = m;
-                if (s == -1)
-            		return;
             }
         }
         Stack<UndoRedo> undos;
         Stack<UndoRedo> redos;
 
         int cursor_location_offset;
-        bool ctrlZ, ctrlY;
+        bool ctrlZ, ctrlY, ctrlX;
         /// end of undo redo section
 
         public MainForm(string path)
@@ -411,15 +409,21 @@ namespace TEbyME
                     if (undos.Count == 0 || (undos.Peek().data != "" && (undos.Peek().data[0] != ' ' || undos.Peek().data[0] != '\t') && (key_press.KeyChar == (char)Keys.Space || key_press.KeyChar == (char)Keys.Enter || key_press.KeyChar == (char)Keys.Tab)))
                     {
                         if (deletion_text == "")
-                            undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
+                            undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 1, ""));
                     }
 
                     if (deletion_text != "")
-                        undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 3, deletion_text));
-
+                    	undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 3, deletion_text));
+                    
                     UndoRedo undo = undos.Peek();
                     undos.Pop();
-                    undo.data += key_press.KeyChar.ToString();
+                    if (ctrlX){
+//                    	undo.data = deletion_text;
+//                    	undo.replace = ""; 
+						undo.data += "";
+                    }else{
+                    	undo.data += key_press.KeyChar.ToString();
+                    }
                     undos.Push(undo);
 
                     if (key_press.KeyChar == (char)Keys.Tab)
@@ -450,8 +454,8 @@ namespace TEbyME
         {
             if (e.Control && e.KeyCode == Keys.Z)
             {
-                while (undos.Count != 0 && undos.Peek().data == "")
-                    undos.Pop();
+                while (undos.Count != 0 && undos.Peek().data == "" && undos.Peek().replace == "")
+                    undos.Pop(); // world here for better result
                 if (undos.Count != 0)
                 {
                     ctrlZ = true;
@@ -502,8 +506,8 @@ namespace TEbyME
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
-                while (redos.Count != 0 && redos.Peek().data == "")
-                    redos.Pop();
+            	while (redos.Count != 0 && redos.Peek().data == "" && redos.Peek().replace == "")
+                    redos.Pop(); // world here for better result
                 if (redos.Count != 0)
                 {
                     ctrlY = true;
@@ -908,13 +912,13 @@ namespace TEbyME
         {
             if (textArea.SelectedText.Length == 0) return;
 
-            undos.Push(new UndoRedo(textArea.SelectedText, textArea.SelectionStart, 2, ""));
-            redos.Clear();
-
             Clipboard.SetText(textArea.SelectedText);
-            
-            key_press = null;
+            deletion_text = textArea.SelectedText;
+
+			ctrlX = true;
+			key_press = new KeyPressEventArgs((char)Keys.A);
             textArea.SelectedText = "";
+            ctrlX = false;
         }
 
         private void PastToolStripMenuItemClick(object sender, EventArgs e)
