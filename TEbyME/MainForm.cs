@@ -400,7 +400,7 @@ namespace TEbyME
                 if (DeletingTimer.Enabled)
                 {
                     DeletingTimer.Enabled = false;
-                    undos.Push(new UndoRedo("", textArea.SelectionStart - 1, 1, ""));
+                    undos.Push(new UndoRedo("", (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 1, ""));
                     redos.Clear();
                 }
 
@@ -417,13 +417,7 @@ namespace TEbyME
                     
                     UndoRedo undo = undos.Peek();
                     undos.Pop();
-                    if (ctrlX){
-//                    	undo.data = deletion_text;
-//                    	undo.replace = ""; 
-						undo.data += "";
-                    }else{
-                    	undo.data += key_press.KeyChar.ToString();
-                    }
+                    undo.data += (ctrlX ? "" : key_press.KeyChar.ToString());
                     undos.Push(undo);
 
                     if (key_press.KeyChar == (char)Keys.Tab)
@@ -437,9 +431,9 @@ namespace TEbyME
                 else
                 {
                     if (deletion_text == "")
-                        undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 1, ""));
+                        undos.Push(new UndoRedo((ctrlX ? "" : key_press.KeyChar.ToString()), (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 1, ""));
                     else
-                        undos.Push(new UndoRedo(key_press.KeyChar.ToString(), textArea.SelectionStart - 1, 3, deletion_text)); //
+                        undos.Push(new UndoRedo((ctrlX ? "" : key_press.KeyChar.ToString()), (textArea.SelectionStart == 0 ? 0 : textArea.SelectionStart - 1), 3, deletion_text)); //
 
                     cursor_location_offset = textArea.TextLength - textArea.SelectionStart;
                 }
