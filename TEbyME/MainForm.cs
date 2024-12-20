@@ -115,6 +115,7 @@ namespace TEbyME
             {
                 filepath = path;
                 textArea.Text = File.ReadAllText(filepath);
+                textArea.SelectionStart = textArea.TextLength;
                 text_changed = false;
 
                 fileNameLabel.Text = "";
