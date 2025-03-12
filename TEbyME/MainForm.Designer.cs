@@ -77,10 +77,10 @@ namespace TEbyME
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.counterLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.fileNameLabel = new TEbyME.NoCopyLabel();
             this.DeletingTimer = new System.Windows.Forms.Timer(this.components);
-            this.counterLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.searchPanel.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -467,6 +467,12 @@ namespace TEbyME
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // counterLabel
+            // 
+            this.counterLabel.Name = "counterLabel";
+            this.counterLabel.Size = new System.Drawing.Size(85, 20);
+            this.counterLabel.Text = "Characters: ";
+            // 
             // mainLayoutPanel
             // 
             this.mainLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
@@ -499,12 +505,6 @@ namespace TEbyME
             this.DeletingTimer.Interval = 550;
             this.DeletingTimer.Tick += new System.EventHandler(this.DeletingTimer_Tick);
             // 
-            // counterLabel
-            // 
-            this.counterLabel.Name = "counterLabel";
-            this.counterLabel.Size = new System.Drawing.Size(85, 20);
-            this.counterLabel.Text = "Characters: ";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
@@ -518,7 +518,7 @@ namespace TEbyME
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Text Editor by M.E. | V2.1.1";
+            this.Text = "Text Editor by M.E. | V2.1.2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.SizeChanged += new System.EventHandler(this.Sform_sizeeventhandler);

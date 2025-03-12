@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TEByME Setup", "TEByME Setup\TEByME Setup.vdproj", "{D2669809-539F-C773-434E-0A5E0416339B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{BD419A99-4D76-43F2-B376-C458E0C08841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD419A99-4D76-43F2-B376-C458E0C08841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD419A99-4D76-43F2-B376-C458E0C08841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2669809-539F-C773-434E-0A5E0416339B}.Debug|Any CPU.ActiveCfg = Debug
+		{D2669809-539F-C773-434E-0A5E0416339B}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A18CB87A-4708-4B05-83C2-3F4C3CD272B9}
 	EndGlobalSection
 EndGlobal
