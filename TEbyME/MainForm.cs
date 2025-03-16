@@ -65,7 +65,7 @@ namespace TEbyME
             public int st_index;
             public int mode;
 
-            public UndoRedo(string d, int s, int m, string r) /// m // 1 adding, 2 reading, 3 both, 4 replace all
+            public UndoRedo(string d, int s, int m, string r) /// m // 1 adding, 2 reading, 3 both, 4 replace all(4 no more need)
             {
                 replace = r;
                 data = d;
@@ -210,12 +210,35 @@ namespace TEbyME
             if (si.current == null)
                 return;
 
-            for (LinkedListNode<int> curr = si.indices.Last; curr != null; curr = curr.Previous)
+            // new fast replace
+            string newText = "";
+            LinkedListNode<int> curr = si.indices.First;
+
+            for (int i = 0; i < textArea.TextLength; ++i)
             {
-                textArea.Select(curr.Value, si.search_text_length);
-                undos.Push(new UndoRedo(replaceTB.Text, curr.Value, 4, textArea.SelectedText));
-                textArea.SelectedText = replaceTB.Text;
+                if (i < curr.Value)
+                    newText += textArea.Text[i];
+                else
+                {
+                    newText += replaceTB.Text;
+                    i += si.search_text_length - 1;
+
+                    curr = curr.Next;
+                    if (curr == null) curr = new LinkedListNode<int>(textArea.TextLength);
+                }
             }
+
+            undos.Push(new UndoRedo(newText, 0, 3, textArea.Text));
+
+            textArea.Text = newText;
+            //
+
+            //for (LinkedListNode<int> curr = si.indices.Last; curr != null; curr = curr.Previous)
+            //{
+            //    textArea.Select(curr.Value, si.search_text_length);
+            //    undos.Push(new UndoRedo(replaceTB.Text, curr.Value, 4, textArea.SelectedText));
+            //    textArea.SelectedText = replaceTB.Text;
+            //} // old long way
 
             si = new SearchIN();
         }
@@ -533,7 +556,7 @@ namespace TEbyME
                     textArea.Select(undo.st_index, undo.replace.Length);
                     textArea.SelectionStart = undo.st_index + undo.replace.Length;
                 }
-                while (undo.mode == 4)
+                while (false && undo.mode == 4) // no more in use
                 {
                     textArea.Select(undo.st_index, undo.data.Length);
                     textArea.SelectedText = undo.replace;
@@ -587,7 +610,7 @@ namespace TEbyME
                     textArea.Select(redo.st_index, redo.data.Length);
                     textArea.SelectionStart = redo.st_index + redo.data.Length;
                 }
-                while (redo.mode == 4)
+                while (false && redo.mode == 4) // no more in use
                 {
                     textArea.Select(redo.st_index, redo.replace.Length);
                     textArea.SelectedText = redo.data;

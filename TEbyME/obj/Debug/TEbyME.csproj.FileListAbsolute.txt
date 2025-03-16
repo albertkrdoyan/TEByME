@@ -112,3 +112,13 @@ C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Debug\TEbyME.csproj.GenerateReso
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Debug\TEbyME.csproj.CoreCompileInputs.cache
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Debug\TEbyME.exe
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Debug\TEbyME.pdb
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\bin\Debug\TEbyME.exe.config
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\bin\Debug\TEbyME.exe
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\bin\Debug\TEbyME.pdb
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.csproj.AssemblyReference.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.MainForm.resources
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.Resource1.resources
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.csproj.GenerateResource.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.csproj.CoreCompileInputs.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.exe
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Debug\TEbyME.pdb

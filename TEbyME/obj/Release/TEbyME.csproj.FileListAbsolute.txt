@@ -14,3 +14,11 @@ C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Release\TEbyME.Resource1.resourc
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Release\TEbyME.csproj.GenerateResource.cache
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Release\TEbyME.csproj.CoreCompileInputs.cache
 C:\Users\alber\Desktop\TEByME V2.1.1\TEbyME\obj\Release\TEbyME.exe
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\bin\Release\TEbyME.exe.config
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\bin\Release\TEbyME.exe
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.csproj.AssemblyReference.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.MainForm.resources
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.Resource1.resources
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.csproj.GenerateResource.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.csproj.CoreCompileInputs.cache
+C:\Users\alber\Desktop\GitHub\TEByME V2.1.2\TEbyME\obj\Release\TEbyME.exe
