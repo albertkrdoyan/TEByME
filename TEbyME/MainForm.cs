@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace TEbyME
@@ -211,16 +212,21 @@ namespace TEbyME
                 return;
 
             // new fast replace
-            string newText = "";
-            LinkedListNode<int> curr = si.indices.First;
+            StringBuilder newText = new StringBuilder(textArea.TextLength + si.indices.Count * (replaceTB.TextLength - si.search_text_length));
 
-            for (int i = 0; i < textArea.TextLength; ++i)
+            LinkedListNode<int> curr = si.indices.First;
+            int len = textArea.TextLength;
+
+            string text = textArea.Text;
+            string replaceText = replaceTB.Text;
+
+            for (int i = 0; i < len; ++i)
             {
                 if (i < curr.Value)
-                    newText += textArea.Text[i];
+                    newText.Append(text[i]);
                 else
                 {
-                    newText += replaceTB.Text;
+                    newText.Append(replaceText);
                     i += si.search_text_length - 1;
 
                     curr = curr.Next;
@@ -228,9 +234,9 @@ namespace TEbyME
                 }
             }
 
-            undos.Push(new UndoRedo(newText, 0, 3, textArea.Text));
+            undos.Push(new UndoRedo(newText.ToString(), 0, 3, textArea.Text));
 
-            textArea.Text = newText;
+            textArea.Text = newText.ToString();
             //
 
             //for (LinkedListNode<int> curr = si.indices.Last; curr != null; curr = curr.Previous)
