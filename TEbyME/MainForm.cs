@@ -96,6 +96,7 @@ namespace TEbyME
 
             PathInit(path);
             OtherInits();
+            textArea.WordWrap = false;
         }
 
         private void Reset()
